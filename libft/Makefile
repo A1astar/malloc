@@ -6,7 +6,7 @@
 #    By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/12 12:50:54 by alacroix          #+#    #+#              #
-#    Updated: 2025/12/18 12:21:13 by alacroix         ###   ########.fr        #
+#    Updated: 2025/12/18 14:16:31 by alacroix         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,6 @@ all: $(NAME)
 
 $(NAME) : $(OBJ)
 	ar rcs $(NAME) $(OBJ)
-
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
