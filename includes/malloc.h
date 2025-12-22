@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2025/12/22 15:18:09 by alacroix         ###   ########.fr       */
+/*   Updated: 2025/12/22 16:10:18 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,13 @@
 # include <sys/resource.h>
 # include <sys/time.h>
 
-// BLOCK_STRUCT
+// DEFINES
+# define TINY_MAX_SIZE 512
+# define SMALL_MAX_SIZE 4096
+# define MAX_NB_ALLOC 100
+# define ALIGNEMENT_VALUE 16
+
+// STRUCTS
 typedef struct s_alloc_arena
 {
 	void *tiny_arena;
@@ -39,16 +45,15 @@ typedef struct s_block
 	char *data;
 } t_block;
 
-// GLOBAL VARIABLE
-
-extern t_alloc_arena alloc_arena = {0};
+// GLOBAL VAR
+extern	t_alloc_arena g_alloc_arena = {0};
 
 // FUNCTIONS
 void	free(void *ptr);
 void	*malloc(size_t size);
 void	*realloc(void *ptr, size_t size);
+void	show_alloc_mem(void);
 
 // BONUS FUNCTION
-void	show_alloc_mem_ex(void);
 
 #endif
