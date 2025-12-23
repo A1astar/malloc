@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2025/12/22 16:10:18 by alacroix         ###   ########.fr       */
+/*   Updated: 2025/12/23 11:50:48 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@
 # define ALIGNEMENT_VALUE 16
 
 // STRUCTS
-typedef struct s_alloc_arena
+typedef struct s_alloc_pools
 {
-	void *tiny_arena;
-	void *small_arena;
-} t_alloc_arena;
+	void *tiny_mem_pool;
+	void *small_mem_pool;
+} t_alloc_pools;
 
 typedef struct s_metadata
 {
@@ -46,7 +46,7 @@ typedef struct s_block
 } t_block;
 
 // GLOBAL VAR
-extern	t_alloc_arena g_alloc_arena = {0};
+extern	t_alloc_pools g_alloc_pools = {0};
 
 // FUNCTIONS
 void	free(void *ptr);
