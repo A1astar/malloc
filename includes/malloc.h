@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2025/12/23 11:50:48 by alacroix         ###   ########.fr       */
+/*   Updated: 2025/12/30 11:44:27 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct s_block
 } t_block;
 
 // GLOBAL VAR
-extern	t_alloc_pools g_alloc_pools = {0};
+extern	t_alloc_pools g_alloc_pools;
 
 // FUNCTIONS
 void	free(void *ptr);

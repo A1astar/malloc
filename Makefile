@@ -4,8 +4,12 @@ CFLAGS += -Wall -Wextra -Werror -std=gnu99
 ifeq ($(HOSTTYPE),)
 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
+
+export LD_LIBRARY_PATH=.
+
 NAME = libft_malloc_$(HOSTTYPE).so
 SYMLINK_NAME = libft_malloc.so
+TEST_NAME = malloc_test
 
 SRC_DIR = ./src
 INC_DIR = ./includes
@@ -20,7 +24,8 @@ LIBS = $(LIBFT)
 AR = ar
 ARFLAGS = rcs
 
-SRC = free.c malloc.c realloc.c show_alloc_mem_ex.c
+TEST_SRC = test/main.c
+SRC = free.c malloc.c realloc.c show_alloc_mem.c globals.c
 
 SRCS = $(addprefix $(SRC_DIR)/,$(SRC))
 OBJ = $(addprefix $(OBJ_DIR)/,$(SRC:.c=.o))
@@ -42,6 +47,9 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 
+test: all
+	$(CC) $(CFLAGS) $(TEST_SRC) -L. -lft_malloc -o $(TEST_NAME)
+
 clean:
 	rm -rf $(OBJ_DIR)
 	$(MAKE) -C $(LIBFT_DIR) clean
@@ -49,9 +57,10 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 	rm -f $(SYMLINK_NAME)
+	rm -f $(TEST_NAME)
 	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re test
 .DEFAULT_GOAL := all
