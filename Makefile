@@ -5,11 +5,11 @@ ifeq ($(HOSTTYPE),)
 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
 
-export LD_LIBRARY_PATH=.
-
 NAME = libft_malloc_$(HOSTTYPE).so
 SYMLINK_NAME = libft_malloc.so
 TEST_NAME = malloc_test
+
+export LD_LIBRARY_PATH=./
 
 SRC_DIR = ./src
 INC_DIR = ./includes
@@ -47,8 +47,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 
-test: all
-	$(CC) $(CFLAGS) $(TEST_SRC) -L. -lft_malloc -o $(TEST_NAME)
+test: $(SYMLINK_NAME)
+	$(CC) $(CFLAGS) $(TEST_SRC) -o $(TEST_NAME)
 
 clean:
 	rm -rf $(OBJ_DIR)

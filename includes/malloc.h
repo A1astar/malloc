@@ -6,15 +6,24 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/15 18:46:18 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/19 16:07:55 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MALLOC_H
 #define MALLOC_H
 
+// DEFINES
+#define _GNU_SOURCE
+#define BLOCKS_MAX_NB 100
+#define TINY_MAX_SIZE 64
+#define SMALL_MAX_SIZE 1024
+#define TINY_ARNEA_PAGES 16
+#define SMALL_ARNEA_PAGES 128
+#define ALIGN_VAL 16
+
 // INCLUDES
-#include <../libft/include/libft.h>
+#include "../libft/include/libft.h"
 #include <pthread.h>
 #include <sys/mman.h>
 #include <sys/resource.h>
@@ -22,14 +31,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <dlfcn.h>
 
-// DEFINES
-#define BLOCKS_MAX_NB 100
-#define TINY_MAX_SIZE 64
-#define SMALL_MAX_SIZE 1024
-#define TINY_ARNEA_PAGES 16
-#define SMALL_ARNEA_PAGES 128
-#define ALIGN_VAL 16
+//! --- FOR DEBUG PURPOSE ONLY ---
+#include <stdio.h>
 
 // STRUCTS
 typedef struct s_arena
