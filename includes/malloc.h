@@ -6,54 +6,54 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2025/12/30 11:44:27 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/15 18:46:18 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MALLOC_H
-# define MALLOC_H
+#define MALLOC_H
 
 // INCLUDES
-# include <../libft/include/libft.h>
-# include <pthread.h>
-# include <sys/mman.h>
-# include <sys/resource.h>
-# include <sys/time.h>
+#include <../libft/include/libft.h>
+#include <pthread.h>
+#include <sys/mman.h>
+#include <sys/resource.h>
+#include <sys/time.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <stddef.h>
 
 // DEFINES
-# define TINY_MAX_SIZE 512
-# define SMALL_MAX_SIZE 4096
-# define MAX_NB_ALLOC 100
-# define ALIGNEMENT_VALUE 16
+#define BLOCKS_MAX_NB 100
+#define TINY_MAX_SIZE 64
+#define SMALL_MAX_SIZE 1024
+#define TINY_ARNEA_PAGES 16
+#define SMALL_ARNEA_PAGES 128
+#define ALIGN_VAL 16
 
 // STRUCTS
-typedef struct s_alloc_pools
+typedef struct s_arena
 {
-	void *tiny_mem_pool;
-	void *small_mem_pool;
-} t_alloc_pools;
+	size_t arena_size;
+	void *arena_ptr;
+} t_arena;
 
-typedef struct s_metadata
+typedef struct s_alloc_arenas
 {
-	unsigned int block_size;
-	unsigned int is_free;
-} t_metadata;
-
-typedef struct s_block
-{
-	t_metadata metadata;
-	char *data;
-} t_block;
+	t_arena tiny_alloc_arena;
+	t_arena small_alloc_arena;
+} t_alloc_arenas;
 
 // GLOBAL VAR
-extern	t_alloc_pools g_alloc_pools;
+extern t_alloc_arenas g_alloc_arenas;
 
 // FUNCTIONS
-void	free(void *ptr);
-void	*malloc(size_t size);
-void	*realloc(void *ptr, size_t size);
-void	show_alloc_mem(void);
+void free(void *ptr);
+void *malloc(size_t size);
+void *realloc(void *ptr, size_t size);
+void show_alloc_mem(void);
 
 // BONUS FUNCTION
+void show_alloc_mem_ex(void);
 
 #endif

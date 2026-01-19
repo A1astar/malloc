@@ -6,79 +6,114 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:08:12 by alacroix          #+#    #+#             */
-/*   Updated: 2025/12/30 11:48:26 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/19 12:26:02 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
-/*Returns rounded up block_size to the closest multipe of ALIGNEMENT_VALUE*/
-size_t align_block(size_t block_size)
+static inline size_t align(size_t size)
 {
-	return block_size + (ALIGNEMENT_VALUE - 1) & ~(ALIGNEMENT_VALUE - 1);
+	return (((size) + (ALIGN_VAL - 1)) & ~ (ALIGN_VAL -1));
 }
 
-/*Returns rounded up pool_size to the closest multipe of sysconf(_SC_PAGESIZE)*/
-size_t align_pool(size_t pool_size)
+static inline size_t get_header_size()
 {
-	size_t page_size = sysconf(_SC_PAGESIZE);
+	return align(sizeof(size_t));
+}
 
-	/*Prefer the non-bitwise version for page_size may not be a multiple of 2*/
+static inline size_t get_raw_arena_size(size_t max_block_size)
+{
+	return 100 * ((get_header_size() * 2) + align(max_block_size));
+}
+
+static inline size_t align_arena(size_t pool_size)
+{
+	size_t page_size;
+	page_size = sysconf(_SC_PAGESIZE);
 	return ((pool_size + page_size - 1) / page_size) * page_size;
 }
 
-/*Returns a new aligned memory block of 100 * max_size*/
-void *create_alloc_pool(size_t max_size)
+int create_alloc_arena(t_arena *alloc_arena, size_t max_block_size)
 {
-	void *mem_ptr = NULL;
-
-	size_t raw_size = 100 * (sizeof(t_metadata) + align_block(max_size));
-	size_t pool_size = align_pool(raw_size);
-
-	mem_ptr = mmap(NULL, pool_size, PROT_READ | PROT_WRITE,
-				MAP_PRIVATE | MAP_ANON, -1, 0);
-
-	if(mem_ptr == MAP_FAILED)
-		return NULL;
-
-	return mem_ptr;
+	alloc_arena->arena_size = align_arena(get_raw_arena_size(max_block_size));
+	alloc_arena->arena_ptr = mmap(NULL, alloc_arena->arena_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
+	if(alloc_arena->arena_ptr == MAP_FAILED)
+		alloc_arena->arena_ptr = NULL;
 }
 
-/*Returns a pointer of requested size block (<= max_size) inside a mem_pool*/
-void *allocator(void *mem_pool, size_t max_size, size_t requested_size)
+void *get_arena_end(t_arena *alloc_arena)
 {
-	(void)requested_size;
-	if(!mem_pool)
-		mem_pool = create_alloc_pool(max_size);
-	else
+	return (char *)alloc_arena->arena_ptr + alloc_arena->arena_size;
+}
+
+void *expend_arena(t_arena *alloc_arena, size_t request_size)
+{
+	size_t map_size = align_arena(request_size);
+	void *current_end = alloc_arena->arena_ptr + alloc_arena->arena_size;
+	void *block = mmap(current_end, map_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON | MAP_FIXED | MAP_FIXED_NOREPLACE, -1, 0);
+	if(block == MAP_FAILED)
+		return NULL;
+	alloc_arena->arena_size += request_size;
+	return block;
+}
+
+void *find_block(t_arena *alloc_arena, size_t requested_size)
+{
+	size_t *current_block = alloc_arena->arena_ptr;
+	while (current_block < get_arena_end(alloc_arena))
 	{
-		/*TODO*/
+		if(!(*current_block & 1) && *current_block >= requested_size)
+			return current_block;
+		current_block = (char *)current_block + (*current_block & ~1);
 	}
 	return NULL;
 }
 
-/*Returns a */
-void *large_allocator(size_t size)
+void *get_memblock(t_arena *alloc_arena, size_t request_size)
 {
-	void *ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON,
-				-1, 0);
-
-	if(ptr == MAP_FAILED)
+	if(!alloc_arena->arena_ptr)
 		return NULL;
-
-	return ptr;
+	size_t *block = find_block(alloc_arena, request_size);
+	if(block)
+		*block = *block | 1;
+	else
+	{
+		block = expend_arena(alloc_arena, request_size);
+		if(!block)
+			return NULL;
+		*block = request_size | 1;
+	}
+	return (char *)block + get_header_size();
 }
 
-/*Allocates size bytes of memory and returns a pointer to the allocated memory*/
-void	*malloc(size_t size)
+void *get_mapped_area(size_t requested_size)
 {
-	void *ptr = NULL;
+	void *ptr = mmap(NULL, requested_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
+	if (ptr == MAP_FAILED)
+		return NULL;
+	*(size_t *)ptr = requested_size | 1;
+	return (char *)ptr + get_header_size();
+}
 
-	if(size <= TINY_MAX_SIZE)
-		ptr = allocator(&g_alloc_pools.tiny_mem_pool, TINY_MAX_SIZE, size);
-	else if(size > TINY_MAX_SIZE && size <= SMALL_MAX_SIZE)
-		ptr = allocator(&g_alloc_pools.small_mem_pool, SMALL_MAX_SIZE, size);
+void *malloc(size_t size)
+{
+	if(!size)
+		size++;
+	size_t block_size = align(size + get_header_size());
+
+	if(block_size <= TINY_MAX_SIZE)
+	{
+		if(!g_alloc_arenas.tiny_alloc_arena.arena_ptr)
+			create_alloc_arena(&g_alloc_arenas.tiny_alloc_arena, TINY_MAX_SIZE);
+		return get_memblock(&g_alloc_arenas.tiny_alloc_arena, block_size);
+	}
+	else if(block_size <= SMALL_MAX_SIZE)
+	{
+		if(!g_alloc_arenas.small_alloc_arena.arena_ptr)
+			create_alloc_arena(&g_alloc_arenas.small_alloc_arena, SMALL_MAX_SIZE);
+		return get_memblock(&g_alloc_arenas.small_alloc_arena, block_size);
+	}
 	else
-		ptr = large_allocator(size);
-	return ptr;
+		return get_mapped_area(block_size);
 }

@@ -6,10 +6,10 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:00:00 by alacroix          #+#    #+#             */
-/*   Updated: 2025/12/30 11:44:54 by alacroix         ###   ########.fr       */
+/*   Updated: 2025/12/30 14:14:44 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
-t_alloc_pools g_alloc_pools = {0};
+t_alloc_arenas g_alloc_arenas = {0};
