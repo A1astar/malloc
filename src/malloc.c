@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:08:12 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/19 17:17:15 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/19 18:09:22 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,35 @@ void *expand_arena(t_arena *alloc_arena, size_t request_size)
 	return block;
 }
 
+void split_block(void *block, size_t requested_size)
+{
+	if(requested_size < *(size_t *)block)
+	{
+		*(size_t *)((char *)block + requested_size) = *(size_t*)block - (requested_size & ~1);
+
+		//! --- FOR DEBUG PURPOSE ONLY ---
+			len = snprintf(wbuffer, sizeof(wbuffer), "splitting block: %p\n", block);
+			write(STDOUT_FILENO, wbuffer, len);
+		//! ------------------------------
+
+		//! --- FOR DEBUG PURPOSE ONLY ---
+			len = snprintf(wbuffer, sizeof(wbuffer), "original block size: %zu\n", *(size_t *)block & ~1);
+			write(STDOUT_FILENO, wbuffer, len);
+		//! ------------------------------
+
+		//! --- FOR DEBUG PURPOSE ONLY ---
+			len = snprintf(wbuffer, sizeof(wbuffer), "next block size: %zu\n", *(size_t *)((char *)block + requested_size));
+			write(STDOUT_FILENO, wbuffer, len);
+		//! ------------------------------
+	}
+
+	*(size_t *)block = requested_size | 1;
+
+	//! --- FOR DEBUG PURPOSE ONLY ---
+		len = snprintf(wbuffer, sizeof(wbuffer), "current block size: %zu\n", *(size_t *)block & ~1);
+		write(STDOUT_FILENO, wbuffer, len);
+	//! ------------------------------
+}
 void *find_block(t_arena *alloc_arena, size_t requested_size)
 {
 	size_t *current_block = alloc_arena->arena_ptr;
@@ -106,13 +135,13 @@ void *find_block(t_arena *alloc_arena, size_t requested_size)
 	while (current_block < end_of_arena)
 	{
 		//! --- FOR DEBUG PURPOSE ONLY ---
-		len = snprintf(wbuffer, sizeof(wbuffer), "checking block ptr: %p\n", current_block);
-		write(STDOUT_FILENO, wbuffer, len);
+			len = snprintf(wbuffer, sizeof(wbuffer), "checking block ptr: %p\n", current_block);
+			write(STDOUT_FILENO, wbuffer, len);
 		//! ------------------------------
 
 		if(!(*current_block & 1L) && *current_block >= requested_size)
 			return current_block;
-		current_block = (size_t *)(char *)current_block + (*current_block & ~1L);
+		current_block = (size_t *)((char *)current_block + (*current_block & ~1));
 	}
 	return NULL;
 }
@@ -128,7 +157,7 @@ void *get_memblock(t_arena *alloc_arena, size_t request_size)
 		return NULL;
 	void *block = find_block(alloc_arena, request_size);
 	if(block)
-		*(size_t *)block = *(size_t *)block | 1;
+		split_block(block, request_size);
 	else
 	{
 		block = expand_arena(alloc_arena, request_size);
