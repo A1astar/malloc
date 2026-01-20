@@ -25,7 +25,14 @@ AR = ar
 ARFLAGS = rcs
 
 TEST_SRC = test/main.c
-SRC = free.c malloc.c realloc.c show_alloc_mem.c globals.c
+
+SRC_MALLOC = malloc/alloc_arena.c malloc/malloc.c malloc/mem_chunk.c
+SRC_FREE = free.c
+SRC_GLOBALS = globals.c
+SRC_REALLOC = realloc.c
+SRC_SHOW_ALLOC =  show_alloc_mem.c show_alloc_mem_ex.c
+
+SRC = $(SRC_MALLOC) $(SRC_FREE) $(SRC_GLOBALS) $(SRC_REALLOC) $(SRC_SHOW_ALLOC)
 
 SRCS = $(addprefix $(SRC_DIR)/,$(SRC))
 OBJ = $(addprefix $(OBJ_DIR)/,$(SRC:.c=.o))
@@ -42,7 +49,8 @@ $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -I$(INC_DIR) -I$(LIBFT) -pthread -c -fPIC $< -o $@
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -I$(INC_DIR) -I$(LIBFT_INCLUDE) -pthread -c -fPIC $< -o $@
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
