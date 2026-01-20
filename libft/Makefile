@@ -5,49 +5,47 @@
 #                                                     +:+ +:+         +:+      #
 #    By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/11/12 12:50:54 by alacroix          #+#    #+#              #
-#    Updated: 2025/12/18 14:16:31 by alacroix         ###   ########.fr        #
+#    Created: 2025/01/04 15:27:43 by alacroix          #+#    #+#              #
+#    Updated: 2026/01/20 11:17:59 by alacroix         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = cc
-CFLAGS += -Wall -Werror -Wextra
 NAME = libft.a
 
-SRC_DIR = ./src
-INC_DIR = ./includes
-OBJ_DIR = ./obj
+CC = gcc
+CFLAGS = -Wall -Werror -Wextra
 
-SRC = ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c \
-	ft_isascii.c ft_isdigit.c ft_isprint.c ft_itoa.c ft_memchr.c \
-	ft_memcmp.c ft_memcpy.c ft_memmove.c ft_memset.c ft_putchar_fd.c \
-	ft_putendl_fd.c ft_putnbr_fd.c ft_putstr_fd.c ft_split.c ft_strchr.c \
-	ft_strdup.c ft_striteri.c ft_strjoin.c ft_strlcat.c ft_strlcpy.c \
-	ft_strlen.c ft_strmapi.c ft_strncmp.c ft_strnstr.c ft_strrchr.c \
-	ft_strtrim.c ft_substr.c ft_tolower.c ft_toupper.c ft_lstadd_back.c \
-	ft_lstadd_front.c ft_lstclear.c ft_lstdelone.c ft_lstiter.c \
-	ft_lstlast.c ft_lstnew.c ft_lstsize.c ft_lstmap.c
+INCDIR = includes
+OBJDIR = obj
 
-SRCS = $(addprefix $(SRC_DIR)/,$(SRC))
-OBJ = $(addprefix $(OBJ_DIR)/,$(SRC:.c=.o))
+CONV_SRC = conv/ft_atoi.c  conv/ft_atol.c conv/ft_atoll.c conv/ft_itoa.c
+FD_SRC = fd/ft_putchar_fd.c fd/ft_putendl_fd.c fd/ft_putnbr_fd.c fd/ft_putstr_fd.c fd/get_next_line.c
+FREE_SRC = free/ft_free_tab.c
+IS_SRC = is/ft_isalnum.c is/ft_isalpha.c is/ft_isascii.c is/ft_isdigit.c is/ft_isprint.c
+LST_SRC = lst/ft_lstadd_back.c lst/ft_lstadd_front.c lst/ft_lstclear.c lst/ft_lstdelone.c lst/ft_lstiter.c lst/ft_lstlast.c lst/ft_lstmap.c lst/ft_lstnew.c lst/ft_lstsize.c
+MATH_SRC = math/ft_pow.c math/ft_sqrt.c
+MEM_SRC = mem/ft_bzero.c mem/ft_calloc.c mem/ft_memchr.c mem/ft_memcmp.c mem/ft_memcpy.c mem/ft_memmove.c mem/ft_memset.c
+STR_SRC = str/ft_split.c str/ft_strchr.c str/ft_strdup.c str/ft_striteri.c str/ft_strjoin.c str/ft_strlcat.c str/ft_strlcpy.c str/ft_strlen.c str/ft_strmapi.c str/ft_strncmp.c str/ft_strnstr.c str/ft_strrchr.c str/ft_strtrim.c str/ft_substr.c str/ft_tolower.c str/ft_toupper.c str/ft_strsize_comp.c str/ft_tabsize.c str/ft_strndup.c
+FT_PRINTF_SRC = ft_printf/ft_printf.c ft_printf/ft_printf_utils.c ft_printf/ft_printf_utils2.c
+
+SRC = $(CONV_SRC) $(DYNARRAY_SRC) $(FD_SRC) $(FREE_SRC) $(IS_SRC) $(LST_SRC) $(MATH_SRC) $(MEM_SRC) $(STR_SRC) $(FT_PRINTF_SRC)
+OBJ = $(patsubst %.c, $(OBJDIR)/%.o, $(SRC))
+
 
 all: $(NAME)
 
-$(NAME) : $(OBJ)
-	ar rcs $(NAME) $(OBJ)
+$(NAME): $(OBJ)
+	@ar rcs $(NAME) $(OBJ)
 
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
-
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@
+$(OBJDIR)/%.o: %.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -I $(INCDIR) -c $< -o $@
 
 clean:
-	rm -rf $(OBJ_DIR)
+	@rm -rf $(OBJDIR)
 
-fclean:
-	rm -f $(NAME)
-	rm -rf $(OBJ_DIR)
+fclean: clean
+	@rm -f $(NAME)
 
 re: fclean all
 

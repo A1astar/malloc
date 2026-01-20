@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/19 16:07:55 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/20 11:19:43 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 #define ALIGN_VAL 16
 
 // INCLUDES
-#include "../libft/include/libft.h"
+#include "../libft/includes/libft.h"
 #include <pthread.h>
 #include <sys/mman.h>
 #include <sys/resource.h>
