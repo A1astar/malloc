@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 11:54:31 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/20 13:05:18 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/20 15:12:37 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static inline void *get_arena_end(t_arena *alloc_arena)
 static void split_chunk(void *chunk, size_t requested_size)
 {
     //! --- FOR DEBUG PURPOSE ONLY ---
-    ft_printf("splitting chunk[%p] (%d)\n", chunk, (int)*(size_t *)chunk);
+	//len = snprintf(buffer, sizeof(buffer), "splitting chunk[%p] (%zu)\n", chunk, *(size_t *)chunk);
+	//write(STDOUT_FILENO, buffer, len);
 
 	if(requested_size < *(size_t *)chunk)
 		*(size_t *)((char *)chunk + requested_size) = *(size_t*)chunk - (requested_size & ~1);
@@ -28,8 +29,10 @@ static void split_chunk(void *chunk, size_t requested_size)
 	*(size_t *)chunk = requested_size | 1;
 
 	//! --- FOR DEBUG PURPOSE ONLY ---
-		ft_printf("current chunk[%p] (%d)\n", chunk, (int)*(size_t *)chunk & ~1);
-        ft_printf("next chunk[%p] (%d)\n", ((char *)chunk + requested_size), (int)*(size_t *)((char *)chunk + requested_size));
+    //len = snprintf(buffer, sizeof(buffer), "current chunk[%p] (%zu)\n", chunk, *(size_t *)chunk & ~1);
+	//write(STDOUT_FILENO, buffer, len);
+    //len = snprintf(buffer, sizeof(buffer), "next chunk[%p] (%zu)\n", ((char *)chunk + requested_size), *(size_t *)((char *)chunk + requested_size));
+	//write(STDOUT_FILENO, buffer, len);
 }
 
 static void *find_chunk(t_arena *alloc_arena, size_t requested_size)
@@ -38,12 +41,14 @@ static void *find_chunk(t_arena *alloc_arena, size_t requested_size)
 	size_t *end_of_arena = get_arena_end(alloc_arena);
 
 	//! --- FOR DEBUG PURPOSE ONLY ---
-		ft_printf("Finding chunk in Arena: [%p] -> [%p]\n", current_chunk, end_of_arena);
+    len = snprintf(buffer, sizeof(buffer), CYAN BOLD "Accessing Arena: [%p]->[%p] (%zu Bytes)\n" RESET, current_chunk, end_of_arena, alloc_arena->arena_size);
+	write(STDOUT_FILENO, buffer, len);
 
 	while (current_chunk < end_of_arena)
 	{
 		//! --- FOR DEBUG PURPOSE ONLY ---
-			ft_printf(" -chunk[%p] (%d)\n", current_chunk, (int)*(size_t *)current_chunk);
+    //    len = snprintf(buffer, sizeof(buffer), " -chunk[%p] (%zu)\n", current_chunk, *(size_t *)current_chunk);
+	//    write(STDOUT_FILENO, buffer, len);
 
 		if(!(*current_chunk & 1L) && *current_chunk >= requested_size)
 			return current_chunk;
@@ -55,7 +60,8 @@ static void *find_chunk(t_arena *alloc_arena, size_t requested_size)
 void *get_arena_chunk(t_arena *alloc_arena, size_t requested_size)
 {
 	//! --- FOR DEBUG PURPOSE ONLY ---
-		ft_printf("Searching a chunk of size: %d\n", (int)requested_size);
+    //len = snprintf(buffer, sizeof(buffer), "Searching a chunk of size: %d\n", (int)requested_size);
+	//write(STDOUT_FILENO, buffer, len);
 
 	if(!alloc_arena->arena_ptr)
 		return NULL;

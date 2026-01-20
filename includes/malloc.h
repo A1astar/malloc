@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/20 13:07:58 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/20 15:01:45 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,22 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <dlfcn.h>
+
+//debug
+#include <stdio.h>
+extern char buffer[2048];
+extern int len;
+#define RED "\033[0;31m"
+#define GREEN "\033[0;32m"
+#define YELLOW "\033[0;33m"
+#define BLUE "\033[0;34m"
+#define MAGENTA "\033[0;35m"
+#define CYAN "\033[0;36m"
+#define WHITE "\033[0;37m"
+#define BOLD "\033[1m"
+#define RESET "\033[0m"
+#define ITALIC "\033[3m"
+
 
 // STRUCTS
 typedef struct s_arena
