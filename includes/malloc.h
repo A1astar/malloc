@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/20 15:01:45 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/21 16:42:00 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@
 #define BLOCKS_MAX_NB 100
 #define TINY_MAX_SIZE 64
 #define SMALL_MAX_SIZE 1024
-#define TINY_ARNEA_PAGES 16
-#define SMALL_ARNEA_PAGES 128
+#define TINY_ARENA 0
+#define SMALL_ARENA 1
+#define ARENA_TYPE 2
+
 #define ALIGN_VAL 16
 
 // INCLUDES
@@ -36,8 +38,6 @@
 
 //debug
 #include <stdio.h>
-extern char buffer[2048];
-extern int len;
 #define RED "\033[0;31m"
 #define GREEN "\033[0;32m"
 #define YELLOW "\033[0;33m"
@@ -49,6 +49,12 @@ extern int len;
 #define RESET "\033[0m"
 #define ITALIC "\033[3m"
 
+typedef struct arena_header
+{
+	void *next_arena;
+	size_t size;
+	size_t nb_alloc;
+}t_arena_header;
 
 // STRUCTS
 typedef struct s_arena
@@ -59,8 +65,7 @@ typedef struct s_arena
 
 typedef struct s_alloc_arenas
 {
-	t_arena tiny_alloc_arena;
-	t_arena small_alloc_arena;
+	void *arenas[ARENA_TYPE];
 } t_alloc_arenas;
 
 // GLOBAL VAR
@@ -72,29 +77,22 @@ static inline size_t align_to_16(size_t size)
 	return (((size) + (ALIGN_VAL - 1)) & ~(ALIGN_VAL - 1));
 }
 
-static inline size_t align_to_pagesize(size_t size)
-{
-	size_t page_size = (size_t)sysconf(_SC_PAGESIZE);
-	return ((size + page_size - 1) / page_size) * page_size;
-}
 
 // MALLOC
-void *malloc(size_t size);
-
-void create_alloc_arena(t_arena *alloc_arena, size_t chunk_max_size);
-void *expand_alloc_arena(t_arena *alloc_arena, size_t requested_size);
-
-void *get_mapped_chunk(size_t requested_size);
-void *get_arena_chunk(t_arena *alloc_arena, size_t requested_size);
+void *ft_malloc(size_t size);
+void init_arenas();
+void create_arena(void **arena, size_t arena_type);
+void *get_memblock_from_mmap(size_t requested_size);
+void *get_memblock_from_arena(size_t arena_type, size_t requested_size);
 
 // FREE
-void free(void *ptr);
+void ft_free(void *ptr);
 
 // REALLOC
-void *realloc(void *ptr, size_t size);
+void *ft_realloc(void *ptr, size_t size);
 
 //SHOW ALLOC
-void show_alloc_mem(void);
-void show_alloc_mem_ex(void);
+void ft_show_alloc_mem(void);
+void ft_show_alloc_mem_ex(void);
 
 #endif

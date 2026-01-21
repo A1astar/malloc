@@ -26,11 +26,11 @@ ARFLAGS = rcs
 
 TEST_SRC = test/main.c
 
-SRC_MALLOC = malloc/alloc_arena.c malloc/malloc.c malloc/mem_chunk.c
-SRC_FREE = free.c
+SRC_MALLOC = ft_malloc/arena.c ft_malloc/ft_malloc.c ft_malloc/memblock.c
+SRC_FREE = ft_free.c
 SRC_GLOBALS = globals.c
-SRC_REALLOC = realloc.c
-SRC_SHOW_ALLOC =  show_alloc_mem.c show_alloc_mem_ex.c
+SRC_REALLOC = ft_realloc.c
+SRC_SHOW_ALLOC = ft_show_alloc_mem.c ft_show_alloc_mem_ex.c
 
 SRC = $(SRC_MALLOC) $(SRC_FREE) $(SRC_GLOBALS) $(SRC_REALLOC) $(SRC_SHOW_ALLOC)
 
@@ -42,8 +42,8 @@ all: $(OBJ_DIR) $(LIBFT) $(NAME) $(SYMLINK_NAME)
 $(SYMLINK_NAME) : $(NAME)
 	ln -s $(NAME) $(SYMLINK_NAME)
 
-$(NAME) : $(OBJ)
-	$(CC) -shared -o $(NAME) $(OBJ)
+$(NAME) : $(OBJ) $(LIBFT)
+	$(CC) -shared -o $(NAME) $(OBJ) $(LIBFT)
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
@@ -56,7 +56,7 @@ $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 
 test: $(SYMLINK_NAME)
-	$(CC) $(CFLAGS) $(TEST_SRC) -o $(TEST_NAME)
+	$(CC) $(CFLAGS) $(TEST_SRC) -I$(INC_DIR) -L. -lft_malloc -Wl,-rpath,'$$ORIGIN' -o $(TEST_NAME)
 
 clean:
 	rm -rf $(OBJ_DIR)

@@ -1,16 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   show_alloc_mem.c                                   :+:      :+:    :+:   */
+/*   realloc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/18 14:14:01 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/19 12:27:02 by alacroix         ###   ########.fr       */
+/*   Created: 2025/12/18 14:14:42 by alacroix          #+#    #+#             */
+/*   Updated: 2026/01/21 12:59:28 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
-void	show_alloc_mem(void)
-{}
+void	*ft_realloc(void *ptr, size_t size)
+{
+	(void)ptr;
+	(void)size;
+	return NULL;
+}

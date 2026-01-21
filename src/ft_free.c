@@ -1,20 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   realloc.c                                          :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/18 14:14:42 by alacroix          #+#    #+#             */
-/*   Updated: 2025/12/18 14:24:37 by alacroix         ###   ########.fr       */
+/*   Created: 2025/12/18 14:15:13 by alacroix          #+#    #+#             */
+/*   Updated: 2026/01/21 12:59:25 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
-void	*realloc(void *ptr, size_t size)
+void	ft_free(void *ptr)
 {
 	(void)ptr;
-	(void)size;
-	return NULL;
 }
