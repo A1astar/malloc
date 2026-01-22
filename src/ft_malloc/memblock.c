@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 11:50:45 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/22 12:56:18 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/22 17:13:53 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,13 @@ static inline void *memblock_payload_offset(void *memblock)
 
 static inline size_t *get_first_arena_memblock(void *current_arena)
 {
-	return (size_t *)((char *)current_arena + align16(sizeof(t_arena_header)));
+	return (size_t *)((char *)current_arena + align16(sizeof(t_arena_lst)));
 }
 
 static inline void *get_end_of_arena(void *arena)
 {
-	t_arena_header *header = (t_arena_header *)arena;
-	return (char *)arena + header->size;
-}
-
-static inline void *get_next_arena(void *arena)
-{
-	t_arena_header *header = (t_arena_header *)arena;
-	return header->next_arena;
+	t_arena_lst *current_arena = (t_arena_lst *)arena;
+	return (char *)arena + current_arena->arena_size;
 }
 
 static inline size_t *next_memblock(size_t *current_memblock)
@@ -56,18 +50,23 @@ static inline bool is_fitting(size_t *current_memblock, size_t requested_size)
 
 static void incr_alloc_count(void *arena)
 {
-	t_arena_header *header = (t_arena_header *)arena;
-	header->nb_alloc++;
-	printf("alloc count: %zu\n", header->nb_alloc);
+	t_arena_lst *current_arena = (t_arena_lst *)arena;
+	current_arena->nb_alloc++;
+	//printf("alloc count: %zu\n", current_arena->nb_alloc);
 }
 
-static void split_memblock(void *memblock, size_t requested_size)
+static void split_memblock(void *arena, void *memblock, size_t requested_size)
 {
-	//TODO: define a limit for splitting to minimize external fragmentation
+	// TODO: define a limit for splitting to minimize external fragmentation
+	size_t *next_memblock = (size_t *)((char *)memblock + requested_size);
 
-	if(requested_size < *(size_t *)memblock)
-		*(size_t *)((char *)memblock + requested_size) = *(size_t *)memblock - (requested_size & ~1);
-	*(size_t *)memblock = requested_size;
+	if (requested_size < *(size_t *)memblock)
+		*next_memblock = *(size_t *)memblock - (requested_size & ~1);
+	*(size_t *)memblock = requested_size | 1;
+
+	t_arena_lst *current_arena = (t_arena_lst *)arena;
+	current_arena->max_available -= (requested_size & ~1);
+	current_arena->nb_alloc++;
 }
 
 static void *find_memblock(void *arena, size_t requested_size)
@@ -75,15 +74,15 @@ static void *find_memblock(void *arena, size_t requested_size)
 	size_t *current_block = get_first_arena_memblock(arena);
 	size_t *end_of_arena = get_end_of_arena(arena);
 
-	printf("current arena: [%p] -> [%p]\n", arena, end_of_arena);
+	//printf("current arena: [%p] -> [%p]\n", arena, end_of_arena);
 
-	while(current_block < end_of_arena)
+	while (current_block < end_of_arena)
 	{
-		printf("	block -> [%p] [alloc_state:%zu] (%zu Bytes)\n", current_block, *current_block & 1, *(size_t *)current_block & ~1);
-		if(is_free(current_block) && is_fitting(current_block, requested_size))
+	//	printf("	block -> [%p] [alloc_state:%zu] (%zu Bytes)\n", current_block, *current_block & 1, *(size_t *)current_block & ~1);
+		if (is_free(current_block) && is_fitting(current_block, requested_size))
 		{
 			incr_alloc_count(arena);
-			split_memblock(current_block, requested_size);
+			split_memblock(arena, current_block, requested_size);
 			mark_as_allocated(current_block);
 			return memblock_payload_offset(current_block);
 		}
@@ -94,22 +93,13 @@ static void *find_memblock(void *arena, size_t requested_size)
 
 void *get_memblock_from_arena(size_t arena_type, size_t requested_size)
 {
-	void *current_arena = g_alloc_arenas.arenas[arena_type];
-	void *next_arena = NULL;
-
-	while(current_arena)
-	{
-		void *memblock = find_memblock(current_arena, requested_size);
-		if(memblock)
-			return memblock;
-		next_arena = get_next_arena(current_arena);
-		if(!next_arena)
-			break;
-		current_arena = next_arena;
-	}
-	//TODO: Create a new arena if no memblock found
-
-	return NULL;
+	void *arena = choose_arena((t_arena_lst **)&g_alloc_arenas.arenas[arena_type], arena_type, requested_size);
+	if (!arena)
+		return NULL;
+	void *memblock = find_memblock(arena, requested_size);
+	if (!memblock)
+		return NULL;
+	return memblock;
 }
 
 void *get_memblock_from_mmap(size_t requested_size)

@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 11:54:31 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/22 12:58:11 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/22 17:15:34 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,59 +31,100 @@ static inline size_t get_arena_size(size_t memblock_max_size)
 {
 	/*
 		According to the subject, the arena should countain at least 100 * memblock_max_size
-		So we should also take in count size of memblocks metadatas and arena_header struct
+		So we should also take in count size of memblocks metadatas and arena_lst struct
 	*/
-	return 100 * (align16(sizeof(size_t)) + align16(memblock_max_size)) + align16(sizeof(t_arena_header));
+	return 100 * (align16(sizeof(size_t)) + align16(memblock_max_size)) + align16(sizeof(t_arena_lst));
 }
 
-void create_arena(void **arena, size_t arena_type)
+static void create_memblock_boudary(t_arena_lst **arena)
 {
-	/*
-		In this malloc implementation, arenas are linked together by the t_arena_header struct
-		This struct also indicates the nb of allocs inside the current arena and its total size
-	*/
+	size_t *first_memblock = (size_t *)((char *)*arena + align16(sizeof(t_arena_lst)));
+	*first_memblock = (*arena)->arena_size - align16(sizeof(t_arena_lst));
+	(*arena)->max_available = *(size_t *)first_memblock;
+}
+
+static void *create_new_arena_list(t_arena_lst **first_arena, size_t arena_type)
+{
 	size_t memblock_max_size = get_memblock_max_size(arena_type);
 	size_t arena_size = align_to_pagesize(get_arena_size(memblock_max_size));
-	*arena = mmap(NULL, arena_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-	if (*arena == MAP_FAILED)
-		*arena = NULL;
+	*first_arena = mmap(NULL, arena_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
+	if (*first_arena == MAP_FAILED)
+		return NULL;
+
+	(*first_arena)->next_arena = *first_arena;
+	(*first_arena)->prev_arena = *first_arena;
+	(*first_arena)->arena_type = arena_type;
+
+	(*first_arena)->arena_size = arena_size;
+	(*first_arena)->nb_alloc = 0;
+
+	create_memblock_boudary(first_arena);
+
+	printf("Creating first_arena [%p] (%zu Bytes)\n", *first_arena, (*first_arena)->arena_size);
+
+	return (void *)(*first_arena);
+}
+
+static void *append_new_arena_list(t_arena_lst **first_arena, size_t arena_type)
+{
+	size_t memblock_max_size = get_memblock_max_size(arena_type);
+	size_t arena_size = align_to_pagesize(get_arena_size(memblock_max_size));
+	t_arena_lst *new_arena = mmap(NULL, arena_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
+	if (new_arena == MAP_FAILED)
+		return NULL;
+
+	t_arena_lst *prev_arena = (*first_arena)->prev_arena;
+	new_arena->next_arena = *first_arena;
+	new_arena->prev_arena = prev_arena;
+	(*first_arena)->prev_arena = new_arena;
+	prev_arena->next_arena = new_arena;
+
+	new_arena->arena_type = arena_type;
+	new_arena->arena_size = arena_size;
+	new_arena->nb_alloc = 0;
+
+	create_memblock_boudary(&new_arena);
+
+	printf("Creating first_arena [%p] (%zu Bytes)\n", *first_arena, (*first_arena)->arena_size);
+
+	return (void *)new_arena;
+}
+
+static void *add_new_arena_to_lst(t_arena_lst **arena_lst, size_t arena_type)
+{
+	if(!*arena_lst)
+	{
+		printf("Creating a new arena lst\n");
+		return create_new_arena_list(arena_lst, arena_type);
+	}
 	else
 	{
-		t_arena_header *header = (t_arena_header *)*arena;
-		header->next_arena = NULL;
-		header->size = arena_size;
-		header->nb_alloc = 0;
-		size_t *first_memblock = (size_t *)((char *)*arena + align16(sizeof(t_arena_header)));
-		*first_memblock = arena_size - align16(sizeof(t_arena_header));
-		header->max_available = *(size_t *)first_memblock;
-		printf("Creating a new arena [%p] (%zu Bytes)\n", *arena, header->size);
+		printf("Appending a new arena to lst\n");
+		return append_new_arena_list(arena_lst, arena_type);
 	}
 }
 
-static inline void *get_next_arena(void *arena)
+static void *choose_from_existing_arena_lst(t_arena_lst **arena_lst, size_t requested_size)
 {
-	t_arena_header *header = (t_arena_header *)arena;
-	return header->next_arena;
-}
-
-void *choose_arena(void *arena, size_t *requested_size)
-{
-	//! wip
-	void *current_arena = arena;
-
-	while(current_arena)
+	if(!*arena_lst)
+		return NULL;
+	t_arena_lst *current_arena = *arena_lst;
+	while(true)
 	{
-		t_arena_header *header = (t_arena_header *)arena;
-		if(header->max_available >= requested_size)
-			return current_arena;
-		current_arena = get_next_arena(current_arena);
+		printf("current_arena[%p] (%zu bytes avaliable) | requested: %zu\n", current_arena, current_arena->max_available, requested_size);
+		if(current_arena->max_available >= requested_size)
+			return (void *)current_arena;
+		current_arena = current_arena->next_arena;
+		if(current_arena == *arena_lst)
+			break ;
 	}
+	return NULL;
 }
 
-void init_arenas()
+void *choose_arena(t_arena_lst **arena_lst, size_t arena_type, size_t requested_size)
 {
-	if (!g_alloc_arenas.arenas[TINY_ARENA])
-		create_arena(&g_alloc_arenas.arenas[TINY_ARENA], TINY_ARENA);
-	if (!g_alloc_arenas.arenas[SMALL_ARENA])
-		create_arena(&g_alloc_arenas.arenas[SMALL_ARENA], SMALL_ARENA);
+	void *choosen_arena = choose_from_existing_arena_lst(arena_lst, requested_size);
+	if((t_arena_lst *)choosen_arena)
+		return choosen_arena;
+	return add_new_arena_to_lst(arena_lst, arena_type);
 }

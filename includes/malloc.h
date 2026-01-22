@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/22 12:51:02 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/22 16:42:57 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #define SMALL_ARENA 1
 #define ARENA_TYPE 2
 
-//MACROS
+// MACROS
 #define align16(size) ((size + (16 - 1)) & ~(16 - 1))
 
 // INCLUDES
@@ -51,19 +51,15 @@
 #define ITALIC "\033[3m"
 
 // STRUCTS
-typedef struct arena_header
+typedef struct s_arena_lst
 {
-	void *next_arena;
-	size_t size;
+	struct s_arena_lst *next_arena;
+	struct s_arena_lst *prev_arena;
+	size_t arena_type;
+	size_t arena_size;
 	size_t max_available;
 	size_t nb_alloc;
-}t_arena_header;
-
-typedef struct s_arena
-{
-	size_t arena_size;
-	void *arena_ptr;
-} t_arena;
+} t_arena_lst;
 
 typedef struct s_alloc_arenas
 {
@@ -71,14 +67,13 @@ typedef struct s_alloc_arenas
 } t_alloc_arenas;
 
 // GLOBAL VAR
-extern t_alloc_arenas g_alloc_arenas;
+extern  t_alloc_arenas g_alloc_arenas;
 
 // MALLOC
 void *ft_malloc(size_t size);
-void init_arenas();
-void create_arena(void **arena, size_t arena_type);
 void *get_memblock_from_mmap(size_t requested_size);
 void *get_memblock_from_arena(size_t arena_type, size_t requested_size);
+void *choose_arena(t_arena_lst **arena, size_t arena_type, size_t requested_size);
 
 // FREE
 void ft_free(void *ptr);
@@ -86,7 +81,7 @@ void ft_free(void *ptr);
 // REALLOC
 void *ft_realloc(void *ptr, size_t size);
 
-//SHOW ALLOC
+// SHOW ALLOC
 void ft_show_alloc_mem(void);
 void ft_show_alloc_mem_ex(void);
 

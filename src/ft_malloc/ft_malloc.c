@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:08:12 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/22 12:12:06 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/22 16:26:29 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,18 @@ static inline size_t align_requested_size(size_t size)
 
 void *ft_malloc(size_t size)
 {
-	init_arenas();
 	void *ptr = NULL;
 	size_t aligned_size = align_requested_size(size);
-	printf("Aligned size: [%zu] -> [%zu]\n", size, aligned_size);
+	printf("malloc([%zu] -> [%zu])\n", size, aligned_size);
+
 	if (aligned_size <= TINY_MAX_SIZE)
 	{
-		printf("Searching inside tiny arena\n");
+		printf("Searching inside tiny arena lst\n");
 		ptr = get_memblock_from_arena(TINY_ARENA, aligned_size);
 	}
 	else if (aligned_size <= SMALL_MAX_SIZE)
 	{
-		printf("Searching inside small arena\n");
+		printf("Searching inside small arena lst\n");
 		ptr = get_memblock_from_arena(SMALL_ARENA, aligned_size);
 	}
 	else
@@ -46,5 +46,6 @@ void *ft_malloc(size_t size)
 		printf("using mmap\n");
 		ptr = get_memblock_from_mmap(aligned_size);
 	}
+	printf("\n");
 	return ptr;
 }
