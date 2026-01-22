@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/21 16:42:00 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/22 12:13:05 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@
 #define SMALL_ARENA 1
 #define ARENA_TYPE 2
 
-#define ALIGN_VAL 16
+//MACROS
+#define align16(size) ((size + (16 - 1)) & ~(16 - 1))
 
 // INCLUDES
 #include "../libft/includes/libft.h"
@@ -36,7 +37,7 @@
 #include <stddef.h>
 #include <dlfcn.h>
 
-//debug
+// DEBUG
 #include <stdio.h>
 #define RED "\033[0;31m"
 #define GREEN "\033[0;32m"
@@ -49,6 +50,7 @@
 #define RESET "\033[0m"
 #define ITALIC "\033[3m"
 
+// STRUCTS
 typedef struct arena_header
 {
 	void *next_arena;
@@ -56,7 +58,6 @@ typedef struct arena_header
 	size_t nb_alloc;
 }t_arena_header;
 
-// STRUCTS
 typedef struct s_arena
 {
 	size_t arena_size;
@@ -70,13 +71,6 @@ typedef struct s_alloc_arenas
 
 // GLOBAL VAR
 extern t_alloc_arenas g_alloc_arenas;
-
-//ALIGN
-static inline size_t align_to_16(size_t size)
-{
-	return (((size) + (ALIGN_VAL - 1)) & ~(ALIGN_VAL - 1));
-}
-
 
 // MALLOC
 void *ft_malloc(size_t size);

@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:08:12 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/21 17:39:46 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/22 12:12:06 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 static inline size_t align_requested_size(size_t size)
 {
-	return align_to_16(sizeof(size_t)) + align_to_16(size > 0 ? size : 1);
+	return align16(sizeof(size_t)) + align16(size > 0 ? size : 1);
 }
 
 void *ft_malloc(size_t size)

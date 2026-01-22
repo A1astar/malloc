@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 11:54:31 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/21 17:46:45 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/22 12:15:36 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static inline size_t align_to_pagesize(size_t size)
 
 static inline size_t get_arena_size(size_t memblock_max_size)
 {
-	return 100 * (align_to_16(sizeof(size_t)) + align_to_16(memblock_max_size)) + align_to_16(sizeof(t_arena_header));
+	return 100 * (align16(sizeof(size_t)) + align16(memblock_max_size)) + align16(sizeof(t_arena_header));
 }
 
 void create_arena(void **arena, size_t arena_type)
@@ -41,8 +41,8 @@ void create_arena(void **arena, size_t arena_type)
 		header->next_arena = NULL;
 		header->size = arena_size;
 		header->nb_alloc = 0;
-		size_t *first_memblock = (size_t *)((char *)*arena + align_to_16(sizeof(t_arena_header)));
-		*first_memblock = arena_size - align_to_16(sizeof(t_arena_header));
+		size_t *first_memblock = (size_t *)((char *)*arena + align16(sizeof(t_arena_header)));
+		*first_memblock = arena_size - align16(sizeof(t_arena_header));
 		printf("Creating a new arena [%p] (%zu Bytes)\n", *arena, header->size);
 	}
 }
