@@ -1,18 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:15:13 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/21 12:59:25 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/22 18:06:14 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
+static inline size_t *get_memblock_metadatas(void *ptr)
+{
+	return (size_t *)((char *)ptr - align16(sizeof(size_t)));
+}
+
+static void free_inside_arena(size_t arena_type, size_t *memblock_metadatas)
+{
+	(void)arena_type;
+	(void)memblock_metadatas;
+	//TODO
+}
+
+static void free_using_munmap(size_t *memblock_metadatas)
+{
+	int ret = munmap((void *)memblock_metadatas, *memblock_metadatas);
+	printf("munmap: %d\n", ret);
+}
+
 void	ft_free(void *ptr)
 {
-	(void)ptr;
+	printf("free(%p)\n", ptr);
+	if(!ptr)
+		return ;
+	size_t *memblock_metadatas = get_memblock_metadatas(ptr);
+	size_t memblock_size = *memblock_metadatas & ~1;
+	printf("memblock[%p] (%zu bytes)\n",memblock_metadatas, memblock_size);
+	if(memblock_size <= TINY_MAX_SIZE)
+		free_inside_arena(TINY_ARENA, memblock_metadatas);
+	else if (memblock_size <= SMALL_MAX_SIZE)
+		free_inside_arena(SMALL_ARENA, memblock_metadatas);
+	else
+		free_using_munmap(memblock_metadatas);
 }
