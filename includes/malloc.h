@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/22 12:13:05 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/22 12:51:02 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct arena_header
 {
 	void *next_arena;
 	size_t size;
+	size_t max_available;
 	size_t nb_alloc;
 }t_arena_header;
 

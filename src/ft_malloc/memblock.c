@@ -6,17 +6,11 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 11:50:45 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/22 12:18:21 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/22 12:56:18 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/malloc.h"
-
-static inline void *get_next_arena(void *arena)
-{
-	t_arena_header *header = (t_arena_header *)arena;
-	return header->next_arena;
-}
 
 static inline void mark_as_allocated(void *memblock)
 {
@@ -37,6 +31,12 @@ static inline void *get_end_of_arena(void *arena)
 {
 	t_arena_header *header = (t_arena_header *)arena;
 	return (char *)arena + header->size;
+}
+
+static inline void *get_next_arena(void *arena)
+{
+	t_arena_header *header = (t_arena_header *)arena;
+	return header->next_arena;
 }
 
 static inline size_t *next_memblock(size_t *current_memblock)
@@ -95,14 +95,20 @@ static void *find_memblock(void *arena, size_t requested_size)
 void *get_memblock_from_arena(size_t arena_type, size_t requested_size)
 {
 	void *current_arena = g_alloc_arenas.arenas[arena_type];
+	void *next_arena = NULL;
+
 	while(current_arena)
 	{
 		void *memblock = find_memblock(current_arena, requested_size);
 		if(memblock)
 			return memblock;
-		current_arena = get_next_arena(current_arena);
+		next_arena = get_next_arena(current_arena);
+		if(!next_arena)
+			break;
+		current_arena = next_arena;
 	}
 	//TODO: Create a new arena if no memblock found
+
 	return NULL;
 }
 
