@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 11:54:31 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/22 17:15:34 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/23 12:28:42 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ static void *choose_from_existing_arena_lst(t_arena_lst **arena_lst, size_t requ
 void *choose_arena(t_arena_lst **arena_lst, size_t arena_type, size_t requested_size)
 {
 	void *choosen_arena = choose_from_existing_arena_lst(arena_lst, requested_size);
-	if((t_arena_lst *)choosen_arena)
+	if(choosen_arena)
 		return choosen_arena;
 	return add_new_arena_to_lst(arena_lst, arena_type);
 }

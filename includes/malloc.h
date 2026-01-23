@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/22 16:42:57 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/23 12:29:26 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef struct s_arena_lst
 
 typedef struct s_alloc_arenas
 {
-	void *arenas[ARENA_TYPE];
+	t_arena_lst *arenas[ARENA_TYPE];
 } t_alloc_arenas;
 
 // GLOBAL VAR
