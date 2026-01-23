@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/23 12:29:26 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/23 12:36:46 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,17 @@ typedef struct s_arena_lst
 	size_t nb_alloc;
 } t_arena_lst;
 
+typedef struct s_mmap_lst
+{
+	struct s_mmap_lst *next_mmap;
+	struct s_mmap_lst *prev_mmap;
+	size_t mmap_size;
+} t_mmap_lst;
+
 typedef struct s_alloc_arenas
 {
-	t_arena_lst *arenas[ARENA_TYPE];
+	t_arena_lst *arenas_lst[ARENA_TYPE];
+	t_mmap_lst *mmap_lst;
 } t_alloc_arenas;
 
 // GLOBAL VAR

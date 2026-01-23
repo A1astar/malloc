@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 11:50:45 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/23 12:31:57 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/23 12:36:17 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static void *find_memblock(void *arena, size_t requested_size)
 
 void *get_memblock_from_arena(size_t arena_type, size_t requested_size)
 {
-	void *arena = choose_arena(&g_alloc_arenas.arenas[arena_type], arena_type, requested_size);
+	void *arena = choose_arena(&g_alloc_arenas.arenas_lst[arena_type], arena_type, requested_size);
 	if (!arena)
 		return NULL;
 	void *memblock = find_memblock(arena, requested_size);
