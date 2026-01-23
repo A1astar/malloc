@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 11:54:31 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/23 14:09:20 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/23 16:14:42 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ static void *create_new_arena_list(t_arena_lst **first_arena, size_t arena_type)
 
 	create_memblock_boudary(first_arena);
 
-	printf("Creating first_arena [%p] (%zu Bytes)\n", *first_arena, (*first_arena)->arena_size);
-
 	return (void *)(*first_arena);
 }
 
@@ -85,38 +83,29 @@ static void *append_new_arena_list(t_arena_lst **first_arena, size_t arena_type)
 
 	create_memblock_boudary(&new_arena);
 
-	printf("Creating first_arena [%p] (%zu Bytes)\n", *first_arena, (*first_arena)->arena_size);
-
 	return (void *)new_arena;
 }
 
 static void *add_new_arena_to_lst(t_arena_lst **arena_lst, size_t arena_type)
 {
-	if(!*arena_lst)
-	{
-		printf("Creating a new arena lst\n");
+	if (!*arena_lst)
 		return create_new_arena_list(arena_lst, arena_type);
-	}
 	else
-	{
-		printf("Appending a new arena to lst\n");
 		return append_new_arena_list(arena_lst, arena_type);
-	}
 }
 
 static void *choose_from_existing_arena_lst(t_arena_lst **arena_lst, size_t requested_size)
 {
-	if(!*arena_lst)
+	if (!*arena_lst)
 		return NULL;
 	t_arena_lst *current_arena = *arena_lst;
-	while(true)
+	while (true)
 	{
-		printf("current_arena[%p] (%zu bytes avaliable) | requested: %zu\n", current_arena, current_arena->max_available, requested_size);
-		if(current_arena->max_available >= requested_size)
+		if (current_arena->max_available >= requested_size)
 			return (void *)current_arena;
 		current_arena = current_arena->next_arena;
-		if(current_arena == *arena_lst)
-			break ;
+		if (current_arena == *arena_lst)
+			break;
 	}
 	return NULL;
 }
@@ -142,7 +131,7 @@ static void append_to_mmap_lst(void **mapped_zone, size_t mapping_size, t_mmap_l
 
 void add_mmap_to_list(void **mapped_zone, size_t mapping_size, t_mmap_lst **mmap_lst)
 {
-	if(!*mmap_lst)
+	if (!*mmap_lst)
 		create_new_mmap_lst(mapped_zone, mapping_size, mmap_lst);
 	else
 		append_to_mmap_lst(mapped_zone, mapping_size, mmap_lst);
@@ -151,7 +140,7 @@ void add_mmap_to_list(void **mapped_zone, size_t mapping_size, t_mmap_lst **mmap
 void *choose_arena(t_arena_lst **arena_lst, size_t arena_type, size_t requested_size)
 {
 	void *choosen_arena = choose_from_existing_arena_lst(arena_lst, requested_size);
-	if(choosen_arena)
+	if (choosen_arena)
 		return choosen_arena;
 	return add_new_arena_to_lst(arena_lst, arena_type);
 }

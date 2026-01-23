@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 11:50:45 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/23 14:08:46 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/23 16:12:59 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,10 @@ static void incr_alloc_count(void *arena)
 {
 	t_arena_lst *current_arena = (t_arena_lst *)arena;
 	current_arena->nb_alloc++;
-	//printf("alloc count: %zu\n", current_arena->nb_alloc);
 }
 
 static void split_memblock(void *arena, void *memblock, size_t requested_size)
 {
-	// TODO: define a limit for splitting to minimize external fragmentation
 	size_t *next_memblock = (size_t *)((char *)memblock + requested_size);
 
 	if (requested_size < *(size_t *)memblock)
@@ -74,11 +72,8 @@ static void *find_memblock(void *arena, size_t requested_size)
 	size_t *current_block = get_first_arena_memblock(arena);
 	size_t *end_of_arena = get_end_of_arena(arena);
 
-	//printf("current arena: [%p] -> [%p]\n", arena, end_of_arena);
-
 	while (current_block < end_of_arena)
 	{
-	//	printf("	block -> [%p] [alloc_state:%zu] (%zu Bytes)\n", current_block, *current_block & 1, *(size_t *)current_block & ~1);
 		if (is_free(current_block) && is_fitting(current_block, requested_size))
 		{
 			incr_alloc_count(arena);
