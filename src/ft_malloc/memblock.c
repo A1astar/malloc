@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 11:50:45 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/23 12:36:17 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/23 14:08:46 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,12 @@ void *get_memblock_from_arena(size_t arena_type, size_t requested_size)
 
 void *get_memblock_from_mmap(size_t requested_size)
 {
-	void *ptr = mmap(NULL, requested_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
+	size_t mapping_size = align16(sizeof(t_mmap_lst)) + requested_size;
+	void *ptr = mmap(NULL, mapping_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
 	if (ptr == MAP_FAILED)
 		return NULL;
-	*(size_t *)ptr = requested_size | 1;
-	return (char *)ptr + align16(sizeof(size_t));
+	void *metadata = (char *)ptr + align16(sizeof(t_mmap_lst));
+	*(size_t *)metadata = requested_size | 1;
+	add_mmap_to_list(&ptr, mapping_size, &g_alloc_arenas.mmap_lst);
+	return memblock_payload_offset(metadata);
 }

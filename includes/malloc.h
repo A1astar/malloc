@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/23 12:36:46 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/23 14:09:33 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void *ft_malloc(size_t size);
 void *get_memblock_from_mmap(size_t requested_size);
 void *get_memblock_from_arena(size_t arena_type, size_t requested_size);
 void *choose_arena(t_arena_lst **arena, size_t arena_type, size_t requested_size);
+void add_mmap_to_list(void **apped_zone, size_t mapping_size, t_mmap_lst **mmap_lst);
 
 // FREE
 void ft_free(void *ptr);

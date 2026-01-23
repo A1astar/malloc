@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 11:54:31 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/23 12:28:42 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/23 14:09:20 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,33 @@ static void *choose_from_existing_arena_lst(t_arena_lst **arena_lst, size_t requ
 			break ;
 	}
 	return NULL;
+}
+
+static void create_new_mmap_lst(void **mapped_zone, size_t mapping_size, t_mmap_lst **mmap_lst)
+{
+	*mmap_lst = *mapped_zone;
+	(*mmap_lst)->next_mmap = *mmap_lst;
+	(*mmap_lst)->prev_mmap = *mmap_lst;
+	(*mmap_lst)->mmap_size = mapping_size;
+}
+
+static void append_to_mmap_lst(void **mapped_zone, size_t mapping_size, t_mmap_lst **mmap_lst)
+{
+	t_mmap_lst *new_maping = (t_mmap_lst *)*mapped_zone;
+	new_maping->mmap_size = mapping_size;
+	t_mmap_lst *last_mapped_zone = (*mmap_lst)->prev_mmap;
+	new_maping->next_mmap = *mmap_lst;
+	new_maping->prev_mmap = last_mapped_zone;
+	last_mapped_zone->next_mmap = new_maping;
+	(*mmap_lst)->prev_mmap = new_maping;
+}
+
+void add_mmap_to_list(void **mapped_zone, size_t mapping_size, t_mmap_lst **mmap_lst)
+{
+	if(!*mmap_lst)
+		create_new_mmap_lst(mapped_zone, mapping_size, mmap_lst);
+	else
+		append_to_mmap_lst(mapped_zone, mapping_size, mmap_lst);
 }
 
 void *choose_arena(t_arena_lst **arena_lst, size_t arena_type, size_t requested_size)
