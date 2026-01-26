@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:15:13 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/26 16:30:03 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/26 17:30:50 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@ static inline bool is_free(size_t *current_memblock)
 	return !(*current_memblock & 1);
 }
 
-static inline void mark_memblock_as_free(size_t *memblock_metadata)
+static inline void mark_memblock_as_free(size_t *memblock_metadata, t_arena_lst **arena)
 {
 	*memblock_metadata = *memblock_metadata & ~1;
+	(*arena)->nb_alloc--;
 }
 
 static inline void merge_memblock(size_t *current_memblock, size_t *next_memblock)
@@ -67,6 +68,23 @@ static t_arena_lst *find_arena(size_t arena_type, size_t *memblock_metadata)
 	return NULL;
 }
 
+static void remove_arena(t_arena_lst *arena)
+{
+	t_arena_lst *current_node = arena;
+	t_arena_lst *prev_node = current_node->prev_arena;
+	t_arena_lst *next_node = current_node->next_arena;
+
+	if (prev_node == current_node && next_node == current_node)
+		g_alloc_arenas.arenas_lst[arena->arena_type] = NULL;
+	else
+	{
+		prev_node->next_arena = next_node;
+		next_node->prev_arena = prev_node;
+		g_alloc_arenas.arenas_lst[arena->arena_type] = next_node;
+	}
+	munmap((void *)current_node, current_node->arena_type);
+}
+
 static void free_inside_arena(size_t arena_type, size_t *memblock_metadata)
 {
 	t_arena_lst *arena = find_arena(arena_type, memblock_metadata);
@@ -78,8 +96,11 @@ static void free_inside_arena(size_t arena_type, size_t *memblock_metadata)
 		current_memblock = (size_t *)((char *)current_memblock + (*current_memblock & ~1));
 	if (current_memblock == end_of_arena)
 		return;
-	mark_memblock_as_free(memblock_metadata);
-	coalese_memblocks(&arena);
+	mark_memblock_as_free(memblock_metadata, &arena);
+	if(arena->nb_alloc == 0)
+		remove_arena(arena);
+	else
+		coalese_memblocks(&arena);
 }
 
 static void free_using_munmap(size_t *memblock_metadatas)

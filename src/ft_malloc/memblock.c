@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 11:50:45 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/26 11:36:28 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/26 17:30:36 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,6 @@ static inline bool is_fitting(size_t *current_memblock, size_t requested_size)
 	return (*current_memblock & ~1) >= requested_size;
 }
 
-static void incr_alloc_count(void *arena)
-{
-	t_arena_lst *current_arena = (t_arena_lst *)arena;
-	current_arena->nb_alloc++;
-}
-
 static void split_memblock(void *arena, void *memblock, size_t requested_size)
 {
 	size_t *next_memblock = (size_t *)((char *)memblock + requested_size);
@@ -76,7 +70,6 @@ static void *find_memblock(void *arena, size_t requested_size)
 	{
 		if (is_free(current_block) && is_fitting(current_block, requested_size))
 		{
-			incr_alloc_count(arena);
 			split_memblock(arena, current_block, requested_size);
 			mark_as_allocated(current_block);
 			return memblock_payload_offset(current_block);
