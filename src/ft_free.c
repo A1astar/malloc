@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:15:13 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/22 18:06:14 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/26 11:34:16 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,19 @@ static void free_inside_arena(size_t arena_type, size_t *memblock_metadatas)
 
 static void free_using_munmap(size_t *memblock_metadatas)
 {
-	int ret = munmap((void *)memblock_metadatas, *memblock_metadatas);
-	printf("munmap: %d\n", ret);
+	t_mmap_lst *current_node = (t_mmap_lst *)((char *)memblock_metadatas - align16(sizeof(t_mmap_lst)));
+	t_mmap_lst *prev_node = current_node->prev_mmap;
+	t_mmap_lst *next_node = current_node->next_mmap;
+
+	if(prev_node == current_node && next_node == current_node)
+		g_alloc_arenas.mmap_lst = NULL;
+	else
+	{
+		prev_node->next_mmap = next_node;
+		next_node->prev_mmap = prev_node;
+		g_alloc_arenas.mmap_lst = next_node;
+	}
+	munmap((void *)current_node, *memblock_metadatas);
 }
 
 void	ft_free(void *ptr)

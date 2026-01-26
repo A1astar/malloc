@@ -6,12 +6,10 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:00:00 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/22 16:43:32 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/26 14:54:08 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
 t_alloc_arenas g_alloc_arenas = {0};
-char buffer[2048] = {0};
-int len = 0;
