@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:15:13 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/26 17:30:50 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/26 17:38:19 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,18 @@ static inline void merge_memblock(size_t *current_memblock, size_t *next_membloc
 	*current_memblock = *current_memblock + *next_memblock;
 }
 
-static void coalese_memblocks(t_arena_lst **arena)
+static void coalese_memblocks(t_arena_lst *arena)
 {
-	size_t *current_memblock = (size_t *)((char *)*arena + align16(sizeof(t_arena_lst)));
-	size_t *end_of_arena = (size_t *)((char *)*arena + (*arena)->arena_size);
+	size_t *current_memblock = (size_t *)((char *)arena + align16(sizeof(t_arena_lst)));
+	size_t *end_of_arena = (size_t *)((char *)arena + arena->arena_size);
 	while (current_memblock < end_of_arena)
 	{
 		size_t *next_memblock = (size_t *)((char *)current_memblock + (*current_memblock & ~1));
 		while (next_memblock < end_of_arena && (is_free(current_memblock) && is_free(next_memblock)))
 		{
 			merge_memblock(current_memblock, next_memblock);
-			if(*current_memblock > (*arena)->max_available)
-				(*arena)->max_available = *current_memblock;
+			if(*current_memblock > arena->max_available)
+				arena->max_available = *current_memblock;
 			next_memblock = (size_t *)((char *)current_memblock + (*current_memblock & ~1));
 		}
 		current_memblock = (size_t *)((char *)current_memblock + (*current_memblock & ~1));
@@ -100,7 +100,7 @@ static void free_inside_arena(size_t arena_type, size_t *memblock_metadata)
 	if(arena->nb_alloc == 0)
 		remove_arena(arena);
 	else
-		coalese_memblocks(&arena);
+		coalese_memblocks(arena);
 }
 
 static void free_using_munmap(size_t *memblock_metadatas)
@@ -122,12 +122,10 @@ static void free_using_munmap(size_t *memblock_metadatas)
 
 void ft_free(void *ptr)
 {
-	//printf("free(%p)\n", ptr);
 	if (!ptr)
 		return;
 	size_t *memblock_metadatas = get_memblock_metadatas(ptr);
 	size_t memblock_size = *memblock_metadatas & ~1;
-	//printf("memblock[%p] (%zu bytes)\n", memblock_metadatas, memblock_size);
 	if (memblock_size <= TINY_MAX_SIZE)
 		free_inside_arena(TINY_ARENA, memblock_metadatas);
 	else if (memblock_size <= SMALL_MAX_SIZE)
