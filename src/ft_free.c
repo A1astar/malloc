@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:15:13 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/26 17:38:19 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/27 11:51:51 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,9 @@ static inline void merge_memblock(size_t *current_memblock, size_t *next_membloc
 	*current_memblock = *current_memblock + *next_memblock;
 }
 
-static void coalese_memblocks(t_arena_lst *arena)
+static void coalese_memblocks(t_arena_lst *arena, size_t *first_memblock, size_t *end_of_arena)
 {
-	size_t *current_memblock = (size_t *)((char *)arena + align16(sizeof(t_arena_lst)));
-	size_t *end_of_arena = (size_t *)((char *)arena + arena->arena_size);
+	size_t *current_memblock = first_memblock;
 	while (current_memblock < end_of_arena)
 	{
 		size_t *next_memblock = (size_t *)((char *)current_memblock + (*current_memblock & ~1));
@@ -49,23 +48,6 @@ static void coalese_memblocks(t_arena_lst *arena)
 		}
 		current_memblock = (size_t *)((char *)current_memblock + (*current_memblock & ~1));
 	}
-}
-
-static t_arena_lst *find_arena(size_t arena_type, size_t *memblock_metadata)
-{
-	t_arena_lst *first_arena = g_alloc_arenas.arenas_lst[arena_type];
-	t_arena_lst *current_arena = g_alloc_arenas.arenas_lst[arena_type];
-
-	while (true)
-	{
-		size_t *end_of_arena = (size_t *)((char *)current_arena + current_arena->arena_size);
-		if ((void *)current_arena < (void *)memblock_metadata && (void *)memblock_metadata < (void *)end_of_arena)
-			return current_arena;
-		current_arena = current_arena->next_arena;
-		if (current_arena == first_arena)
-			break;
-	}
-	return NULL;
 }
 
 static void remove_arena(t_arena_lst *arena)
@@ -85,13 +67,31 @@ static void remove_arena(t_arena_lst *arena)
 	munmap((void *)current_node, current_node->arena_type);
 }
 
+static t_arena_lst *find_arena(size_t arena_type, size_t *memblock_metadata)
+{
+	t_arena_lst *first_arena = g_alloc_arenas.arenas_lst[arena_type];
+	t_arena_lst *current_arena = g_alloc_arenas.arenas_lst[arena_type];
+
+	while (true)
+	{
+		size_t *end_of_arena = (size_t *)((char *)current_arena + current_arena->arena_size);
+		if ((void *)current_arena < (void *)memblock_metadata && (void *)memblock_metadata < (void *)end_of_arena)
+			return current_arena;
+		current_arena = current_arena->next_arena;
+		if (current_arena == first_arena)
+			break;
+	}
+	return NULL;
+}
+
 static void free_inside_arena(size_t arena_type, size_t *memblock_metadata)
 {
 	t_arena_lst *arena = find_arena(arena_type, memblock_metadata);
 	if (!arena)
 		return;
-	size_t *current_memblock = (size_t *)((char *)arena + align16(sizeof(t_arena_lst)));
+	size_t *first_memblock = (size_t *)((char *)arena + align16(sizeof(t_arena_lst)));
 	size_t *end_of_arena = (size_t *)((char *)arena + arena->arena_size);
+	size_t *current_memblock = first_memblock;
 	while (current_memblock != memblock_metadata && current_memblock < end_of_arena)
 		current_memblock = (size_t *)((char *)current_memblock + (*current_memblock & ~1));
 	if (current_memblock == end_of_arena)
@@ -100,7 +100,7 @@ static void free_inside_arena(size_t arena_type, size_t *memblock_metadata)
 	if(arena->nb_alloc == 0)
 		remove_arena(arena);
 	else
-		coalese_memblocks(arena);
+		coalese_memblocks(arena, first_memblock, end_of_arena);
 }
 
 static void free_using_munmap(size_t *memblock_metadatas)

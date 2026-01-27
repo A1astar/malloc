@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 11:54:31 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/26 11:36:17 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/27 12:02:18 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,12 @@ static inline size_t get_memblock_max_size(size_t arena_type)
 
 static inline size_t align_to_pagesize(size_t size)
 {
-	/*
-		The arena size should be aligned to the system _SC_PAGEZISE value
-		thus, it prevent a potential heap breakpoint between two pages boudaries
-	*/
 	size_t page_size = (size_t)sysconf(_SC_PAGESIZE);
 	return ((size + page_size - 1) / page_size) * page_size;
 }
 
 static inline size_t get_arena_size(size_t memblock_max_size)
 {
-	/*
-		According to the subject, the arena should countain at least 100 * memblock_max_size
-		So we should also take in count size of memblocks metadatas and arena_lst struct
-	*/
 	return 100 * (align16(sizeof(size_t)) + align16(memblock_max_size)) + align16(sizeof(t_arena_lst));
 }
 

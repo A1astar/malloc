@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 11:50:45 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/26 17:30:36 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/27 12:01:30 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,6 @@ static inline void mark_as_allocated(void *memblock)
 static inline void *memblock_payload_offset(void *memblock)
 {
 	return (char *)memblock + align16(sizeof(size_t));
-}
-
-static inline size_t *get_first_arena_memblock(void *current_arena)
-{
-	return (size_t *)((char *)current_arena + align16(sizeof(t_arena_lst)));
-}
-
-static inline void *get_end_of_arena(void *arena)
-{
-	t_arena_lst *current_arena = (t_arena_lst *)arena;
-	return (char *)arena + current_arena->arena_size;
-}
-
-static inline size_t *next_memblock(size_t *current_memblock)
-{
-	return (size_t *)((char *)current_memblock + (*current_memblock & ~1));
 }
 
 static inline bool is_free(size_t *current_memblock)
@@ -63,8 +47,9 @@ static void split_memblock(void *arena, void *memblock, size_t requested_size)
 
 static void *find_memblock(void *arena, size_t requested_size)
 {
-	size_t *current_block = get_first_arena_memblock(arena);
-	size_t *end_of_arena = get_end_of_arena(arena);
+	t_arena_lst *current_arena = (t_arena_lst *)arena;
+	size_t *current_block = (size_t *)((char *)current_arena + align16(sizeof(t_arena_lst)));
+	size_t *end_of_arena = (size_t *)((char *)arena + current_arena->arena_size);
 
 	while (current_block < end_of_arena)
 	{
@@ -74,7 +59,7 @@ static void *find_memblock(void *arena, size_t requested_size)
 			mark_as_allocated(current_block);
 			return memblock_payload_offset(current_block);
 		}
-		current_block = next_memblock(current_block);
+		current_block = (size_t *)((char *)current_block + (*current_block & ~1));
 	}
 	return NULL;
 }
