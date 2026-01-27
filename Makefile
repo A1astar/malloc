@@ -50,7 +50,7 @@ $(OBJ_DIR):
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -I$(INC_DIR) -I$(LIBFT_INCLUDE) -pthread -c -fPIC $< -o $@
+	$(CC) $(CFLAGS) -I$(INC_DIR) -I$(LIBFT_INCLUDE) -lpthread -c -fPIC $< -o $@
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)

@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:15:13 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/27 14:22:09 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/27 15:40:07 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,10 +120,12 @@ static void free_using_munmap(size_t *memblock_metadata)
 	}
 	munmap((void *)current_node, *memblock_metadata);
 	g_alloc_arenas.total_alloc_bytes -= *(size_t *)memblock_metadata & ~1;
+
 }
 
 void ft_free(void *ptr)
 {
+	//TODO: MUTEX START
 	if (!ptr)
 		return;
 	size_t *memblock_metadata = get_memblock_metadata(ptr);
@@ -134,4 +136,6 @@ void ft_free(void *ptr)
 		free_inside_arena(SMALL_ARENA, memblock_metadata);
 	else
 		free_using_munmap(memblock_metadata);
+	//TODO: MUTEX END
+
 }

@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/27 14:15:19 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/27 15:13:53 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ typedef struct s_alloc_arenas
 
 // GLOBAL VAR
 extern t_alloc_arenas g_alloc_arenas;
+extern pthread_mutex_t malloc_mutex;
 
 // MALLOC
 void *ft_malloc(size_t size);
