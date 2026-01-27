@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   show_alloc_mem_ex.c                                :+:      :+:    :+:   */
+/*   ft_show_alloc_mem_ex.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 12:24:07 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/21 12:59:30 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/27 16:03:25 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
-void	ft_show_alloc_mem_ex(void)
+void	show_alloc_mem_ex(void)
 {}

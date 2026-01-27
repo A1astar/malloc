@@ -6,13 +6,13 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:14:01 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/27 15:46:29 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/27 16:06:53 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
-void print_arena(t_arena_lst *arena, size_t arena_size)
+static void print_arena(t_arena_lst *arena, size_t arena_size)
 {
     size_t *current_block = (size_t *)((char *)arena + align16(sizeof(t_arena_lst)));
     size_t *end_of_arena = (size_t *)((char *)arena + arena_size);
@@ -27,7 +27,7 @@ void print_arena(t_arena_lst *arena, size_t arena_size)
     }
 }
 
-void print_arena_lst(t_arena_lst *first_node, char *name)
+static void print_arena_lst(t_arena_lst *first_node, char *name)
 {
     ft_printf(BOLD "%s:\n" RESET, name);
     t_arena_lst *current_node = first_node;
@@ -45,13 +45,13 @@ void print_arena_lst(t_arena_lst *first_node, char *name)
     }
 }
 
-void print_mmap_lst(t_mmap_lst *first_node)
+static void print_mmap_lst(t_mmap_lst *first_node)
 {
     ft_printf(BOLD "LARGE:\n" RESET);
     t_mmap_lst *current_node = first_node;
     if (!current_node)
     {
-        printf(ITALIC"    Empty\n"RESET);
+        ft_printf(ITALIC"    Empty\n"RESET);
         return;
     }
     while (true)
@@ -64,7 +64,7 @@ void print_mmap_lst(t_mmap_lst *first_node)
     }
 }
 
-void ft_show_alloc_mem(void)
+void show_alloc_mem(void)
 {
     pthread_mutex_lock(&malloc_mutex);
     print_arena_lst(g_alloc_arenas.arenas_lst[TINY_ARENA], "TINY");

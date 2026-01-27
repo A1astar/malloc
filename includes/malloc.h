@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/27 15:13:53 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/27 16:03:07 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,20 +79,20 @@ extern t_alloc_arenas g_alloc_arenas;
 extern pthread_mutex_t malloc_mutex;
 
 // MALLOC
-void *ft_malloc(size_t size);
+void *malloc(size_t size);
 void *get_memblock_from_mmap(size_t requested_size);
 void *get_memblock_from_arena(size_t arena_type, size_t requested_size);
 void *choose_arena(t_arena_lst **arena, size_t arena_type, size_t requested_size);
 void add_mmap_to_list(void **mapped_zone, t_mmap_lst **mmap_lst);
 
 // FREE
-void ft_free(void *ptr);
+void free(void *ptr);
 
 // REALLOC
-void *ft_realloc(void *ptr, size_t size);
+void *realloc(void *ptr, size_t size);
 
 // SHOW ALLOC
-void ft_show_alloc_mem(void);
-void ft_show_alloc_mem_ex(void);
+void show_alloc_mem(void);
+void show_alloc_mem_ex(void);
 
 #endif
