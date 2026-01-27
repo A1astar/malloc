@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 15:09:08 by alacroix          #+#    #+#             */
-/*   Updated: 2025/01/04 15:57:50 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/27 12:40:55 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,12 @@ static int	ft_put_arg(const char c, va_list args)
 		nbr = va_arg(args, int);
 		ft_putnbr(nbr);
 		return (ft_number_count(nbr, 10));
+	}
+	if (c == 'z')
+	{
+		size_t number = va_arg(args, size_t);
+		ft_putnbr(number);
+		return (ft_number_count(number, 10));
 	}
 	if (c == 'u')
 	{

@@ -6,13 +6,13 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:15:13 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/27 11:51:51 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/27 14:22:09 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
-static inline size_t *get_memblock_metadatas(void *ptr)
+static inline size_t *get_memblock_metadata(void *ptr)
 {
 	return (size_t *)((char *)ptr - align16(sizeof(size_t)));
 }
@@ -42,7 +42,7 @@ static void coalese_memblocks(t_arena_lst *arena, size_t *first_memblock, size_t
 		while (next_memblock < end_of_arena && (is_free(current_memblock) && is_free(next_memblock)))
 		{
 			merge_memblock(current_memblock, next_memblock);
-			if(*current_memblock > arena->max_available)
+			if (*current_memblock > arena->max_available)
 				arena->max_available = *current_memblock;
 			next_memblock = (size_t *)((char *)current_memblock + (*current_memblock & ~1));
 		}
@@ -97,15 +97,16 @@ static void free_inside_arena(size_t arena_type, size_t *memblock_metadata)
 	if (current_memblock == end_of_arena)
 		return;
 	mark_memblock_as_free(memblock_metadata, &arena);
-	if(arena->nb_alloc == 0)
+	if (arena->nb_alloc == 0)
 		remove_arena(arena);
 	else
 		coalese_memblocks(arena, first_memblock, end_of_arena);
+	g_alloc_arenas.total_alloc_bytes -= *(size_t *)memblock_metadata & ~1;
 }
 
-static void free_using_munmap(size_t *memblock_metadatas)
+static void free_using_munmap(size_t *memblock_metadata)
 {
-	t_mmap_lst *current_node = (t_mmap_lst *)((char *)memblock_metadatas - align16(sizeof(t_mmap_lst)));
+	t_mmap_lst *current_node = (t_mmap_lst *)((char *)memblock_metadata - align16(sizeof(t_mmap_lst)));
 	t_mmap_lst *prev_node = current_node->prev_mmap;
 	t_mmap_lst *next_node = current_node->next_mmap;
 
@@ -117,19 +118,20 @@ static void free_using_munmap(size_t *memblock_metadatas)
 		next_node->prev_mmap = prev_node;
 		g_alloc_arenas.mmap_lst = next_node;
 	}
-	munmap((void *)current_node, *memblock_metadatas);
+	munmap((void *)current_node, *memblock_metadata);
+	g_alloc_arenas.total_alloc_bytes -= *(size_t *)memblock_metadata & ~1;
 }
 
 void ft_free(void *ptr)
 {
 	if (!ptr)
 		return;
-	size_t *memblock_metadatas = get_memblock_metadatas(ptr);
-	size_t memblock_size = *memblock_metadatas & ~1;
+	size_t *memblock_metadata = get_memblock_metadata(ptr);
+	size_t memblock_size = *memblock_metadata & ~1;
 	if (memblock_size <= TINY_MAX_SIZE)
-		free_inside_arena(TINY_ARENA, memblock_metadatas);
+		free_inside_arena(TINY_ARENA, memblock_metadata);
 	else if (memblock_size <= SMALL_MAX_SIZE)
-		free_inside_arena(SMALL_ARENA, memblock_metadatas);
+		free_inside_arena(SMALL_ARENA, memblock_metadata);
 	else
-		free_using_munmap(memblock_metadatas);
+		free_using_munmap(memblock_metadata);
 }

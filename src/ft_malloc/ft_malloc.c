@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:08:12 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/23 16:15:39 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/27 13:55:31 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void *ft_malloc(size_t size)
 	if (size == 0)
 		return NULL;
 	size_t aligned_size = align_requested_size(size);
-
 	void *ptr = NULL;
 	if (aligned_size <= TINY_MAX_SIZE)
 		ptr = get_memblock_from_arena(TINY_ARENA, aligned_size);

@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/26 11:36:34 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/27 14:15:19 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,17 +71,18 @@ typedef struct s_alloc_arenas
 {
 	t_arena_lst *arenas_lst[ARENA_TYPE];
 	t_mmap_lst *mmap_lst;
+	size_t total_alloc_bytes;
 } t_alloc_arenas;
 
 // GLOBAL VAR
-extern  t_alloc_arenas g_alloc_arenas;
+extern t_alloc_arenas g_alloc_arenas;
 
 // MALLOC
 void *ft_malloc(size_t size);
 void *get_memblock_from_mmap(size_t requested_size);
 void *get_memblock_from_arena(size_t arena_type, size_t requested_size);
 void *choose_arena(t_arena_lst **arena, size_t arena_type, size_t requested_size);
-void add_mmap_to_list(void **apped_zone, t_mmap_lst **mmap_lst);
+void add_mmap_to_list(void **mapped_zone, t_mmap_lst **mmap_lst);
 
 // FREE
 void ft_free(void *ptr);

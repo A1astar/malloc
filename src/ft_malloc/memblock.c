@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 11:50:45 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/27 12:01:30 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/27 14:26:15 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static void *find_memblock(void *arena, size_t requested_size)
 		{
 			split_memblock(arena, current_block, requested_size);
 			mark_as_allocated(current_block);
+			g_alloc_arenas.total_alloc_bytes += *(size_t *)current_block & ~1;
 			return memblock_payload_offset(current_block);
 		}
 		current_block = (size_t *)((char *)current_block + (*current_block & ~1));
@@ -84,5 +85,6 @@ void *get_memblock_from_mmap(size_t requested_size)
 	void *metadata = (char *)ptr + align16(sizeof(t_mmap_lst));
 	*(size_t *)metadata = mapping_size | 1;
 	add_mmap_to_list(&ptr, &g_alloc_arenas.mmap_lst);
+	g_alloc_arenas.total_alloc_bytes += mapping_size;
 	return memblock_payload_offset(metadata);
 }
