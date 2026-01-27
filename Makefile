@@ -19,7 +19,7 @@ LIBFT_DIR := libft
 LIBFT := $(LIBFT_DIR)/libft.a
 LIBFT_INCLUDE := $(LIBFT_DIR)/includes
 LDFLAGS = -L$(LIBFT_DIR)
-LIBS = $(LIBFT)
+LIBS = $(LIBFT) -lpthread
 
 AR = ar
 ARFLAGS = rcs
@@ -43,14 +43,14 @@ $(SYMLINK_NAME) : $(NAME)
 	ln -s $(NAME) $(SYMLINK_NAME)
 
 $(NAME) : $(OBJ) $(LIBFT)
-	$(CC) -shared -o $(NAME) $(OBJ) $(LIBFT)
+	$(CC) -shared -o $(NAME) $(OBJ) $(LIBS)
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -I$(INC_DIR) -I$(LIBFT_INCLUDE) -lpthread -c -fPIC $< -o $@
+	$(CC) $(CFLAGS) -I$(INC_DIR) -I$(LIBFT_INCLUDE) -c -fPIC $< -o $@
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)

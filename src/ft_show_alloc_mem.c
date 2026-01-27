@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:14:01 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/27 15:40:29 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/27 15:46:29 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,10 @@ void print_mmap_lst(t_mmap_lst *first_node)
 
 void ft_show_alloc_mem(void)
 {
-	//TODO: MUTEX START
+    pthread_mutex_lock(&malloc_mutex);
     print_arena_lst(g_alloc_arenas.arenas_lst[TINY_ARENA], "TINY");
     print_arena_lst(g_alloc_arenas.arenas_lst[SMALL_ARENA], "SMALL");
     print_mmap_lst(g_alloc_arenas.mmap_lst);
     ft_printf(BOLD "Total: %z bytes\n" RESET, g_alloc_arenas.total_alloc_bytes);
-	//TODO: MUTEX END
+	pthread_mutex_unlock(&malloc_mutex);
 }

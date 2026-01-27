@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:15:13 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/27 15:40:07 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/27 15:47:08 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ static void free_using_munmap(size_t *memblock_metadata)
 
 void ft_free(void *ptr)
 {
-	//TODO: MUTEX START
+	pthread_mutex_lock(&malloc_mutex);
 	if (!ptr)
 		return;
 	size_t *memblock_metadata = get_memblock_metadata(ptr);
@@ -136,6 +136,5 @@ void ft_free(void *ptr)
 		free_inside_arena(SMALL_ARENA, memblock_metadata);
 	else
 		free_using_munmap(memblock_metadata);
-	//TODO: MUTEX END
-
+	pthread_mutex_unlock(&malloc_mutex);
 }
