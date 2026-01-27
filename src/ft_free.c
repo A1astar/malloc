@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:15:13 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/27 17:14:13 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/27 17:45:03 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,9 +124,9 @@ static void free_using_munmap(size_t *memblock_metadata)
 
 void free(void *ptr)
 {
-	//pthread_mutex_lock(&malloc_mutex);
 	if (!ptr)
 		return;
+	pthread_mutex_lock(&malloc_mutex);
 	size_t *memblock_metadata = get_memblock_metadata(ptr);
 	size_t memblock_size = *memblock_metadata & ~1;
 	if (memblock_size <= TINY_MAX_SIZE)
@@ -135,5 +135,5 @@ void free(void *ptr)
 		free_inside_arena(SMALL_ARENA, memblock_metadata);
 	else
 		free_using_munmap(memblock_metadata);
-//	pthread_mutex_unlock(&malloc_mutex);
+	pthread_mutex_unlock(&malloc_mutex);
 }

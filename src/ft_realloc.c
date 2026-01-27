@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:14:42 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/27 17:14:17 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/27 17:43:52 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static inline size_t *get_memblock_metadatas(void *ptr)
 
 void *realloc(void *ptr, size_t size)
 {
-	//pthread_mutex_lock(&malloc_mutex);
 	if (!ptr)
 		return malloc(size);
 	if (size == 0)
@@ -36,6 +35,5 @@ void *realloc(void *ptr, size_t size)
 		return NULL;
 	ft_memmove(new_ptr, ptr, current_memblock_size);
 	free(ptr);
-//	pthread_mutex_unlock(&malloc_mutex);
 	return new_ptr;
 }
