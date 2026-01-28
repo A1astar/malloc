@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:15:13 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/27 17:45:03 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/28 16:32:40 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ static void free_using_munmap(size_t *memblock_metadata)
 	t_mmap_lst *prev_node = current_node->prev_mmap;
 	t_mmap_lst *next_node = current_node->next_mmap;
 	size_t memblock_size = *memblock_metadata & ~1;
+
 	if (prev_node == current_node && next_node == current_node)
 		g_alloc_arenas.mmap_lst = NULL;
 	else
@@ -124,11 +125,12 @@ static void free_using_munmap(size_t *memblock_metadata)
 
 void free(void *ptr)
 {
-	if (!ptr)
+	if (!ptr || !is_from_current_allocator(ptr))
 		return;
 	pthread_mutex_lock(&malloc_mutex);
 	size_t *memblock_metadata = get_memblock_metadata(ptr);
 	size_t memblock_size = *memblock_metadata & ~1;
+
 	if (memblock_size <= TINY_MAX_SIZE)
 		free_inside_arena(TINY_ARENA, memblock_metadata);
 	else if (memblock_size <= SMALL_MAX_SIZE)

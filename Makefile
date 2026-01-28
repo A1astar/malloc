@@ -30,8 +30,9 @@ SRC_FREE = ft_free.c
 SRC_GLOBALS = globals.c
 SRC_REALLOC = ft_realloc.c
 SRC_SHOW_ALLOC = ft_show_alloc_mem.c ft_show_alloc_mem_ex.c
+SRC_ANALYSER = ptr_analyser.c
 
-SRC = $(SRC_MALLOC) $(SRC_FREE) $(SRC_GLOBALS) $(SRC_REALLOC) $(SRC_SHOW_ALLOC)
+SRC = $(SRC_MALLOC) $(SRC_FREE) $(SRC_GLOBALS) $(SRC_REALLOC) $(SRC_SHOW_ALLOC) $(SRC_ANALYSER)
 
 SRCS = $(addprefix $(SRC_DIR)/,$(SRC))
 OBJ = $(addprefix $(OBJ_DIR)/,$(SRC:.c=.o))

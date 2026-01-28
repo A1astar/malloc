@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/27 17:32:40 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/28 16:32:27 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,8 @@ void *realloc(void *ptr, size_t size);
 // SHOW ALLOC
 void show_alloc_mem(void);
 void show_alloc_mem_ex(void);
+
+// PTR_ANALYSER
+bool is_from_current_allocator(void *ptr);
 
 #endif
