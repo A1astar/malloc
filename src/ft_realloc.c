@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:14:42 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/28 16:32:55 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/28 17:40:18 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@ static inline size_t *get_memblock_metadatas(void *ptr)
 
 void *realloc(void *ptr, size_t size)
 {
-	if (!ptr || !is_from_current_allocator(ptr))
+	if (!ptr)
 		return malloc(size);
+	if(!is_from_current_allocator(ptr))
+		return NULL;
 	if (size == 0)
 	{
 		free(ptr);

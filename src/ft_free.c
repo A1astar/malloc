@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:15:13 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/28 16:32:40 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/28 17:40:14 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,9 @@ static void free_using_munmap(size_t *memblock_metadata)
 	t_mmap_lst *prev_node = current_node->prev_mmap;
 	t_mmap_lst *next_node = current_node->next_mmap;
 	size_t memblock_size = *memblock_metadata & ~1;
+
+	if(!current_node || (!prev_node && !next_node))
+		return;
 
 	if (prev_node == current_node && next_node == current_node)
 		g_alloc_arenas.mmap_lst = NULL;
