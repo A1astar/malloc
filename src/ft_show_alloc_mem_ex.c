@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 12:24:07 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/28 14:31:08 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/29 18:11:59 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void format_hex_output(unsigned char c)
 
 static void format_char_output(unsigned char c)
 {
-    if(c >= ' ' && c <= '~')
+    if (c >= ' ' && c <= '~')
         ft_printf("%c", c);
     else
         ft_printf(".");

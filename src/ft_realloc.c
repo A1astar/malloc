@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:14:42 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/29 17:18:34 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/29 18:12:02 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void *realloc(void *ptr, size_t size)
 	size_t *memblock_metadata = get_memblock_metadatas(ptr);
 	size_t current_memblock_size = *memblock_metadata & ~1;
 	size_t user_data_size;
-	if(current_memblock_size > SMALL_MAX_SIZE)
+	if (current_memblock_size > SMALL_MAX_SIZE)
 		user_data_size = current_memblock_size - align16(sizeof(size_t)) - align16(sizeof(t_mmap_lst));
 	else
 		user_data_size = current_memblock_size - align16(sizeof(size_t));

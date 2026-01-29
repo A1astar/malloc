@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:14:01 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/28 14:39:09 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/29 18:11:56 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void print_arena_lst(t_arena_lst *first_node, char *name)
     t_arena_lst *current_node = first_node;
     if (!current_node)
     {
-        ft_printf(ITALIC"    Empty\n"RESET);
+        ft_printf(ITALIC "    Empty\n" RESET);
         return;
     }
     while (true)
@@ -51,7 +51,7 @@ static void print_mmap_lst(t_mmap_lst *first_node)
     t_mmap_lst *current_node = first_node;
     if (!current_node)
     {
-        ft_printf(ITALIC"    Empty\n"RESET);
+        ft_printf(ITALIC "    Empty\n" RESET);
         return;
     }
     while (true)
@@ -71,5 +71,5 @@ void show_alloc_mem(void)
     print_arena_lst(g_alloc_arenas.arenas_lst[SMALL_ARENA], "SMALL");
     print_mmap_lst(g_alloc_arenas.mmap_lst);
     ft_printf(BOLD "Total: %z bytes\n" RESET, g_alloc_arenas.total_alloc_bytes);
-	pthread_mutex_unlock(&malloc_mutex);
+    pthread_mutex_unlock(&malloc_mutex);
 }
