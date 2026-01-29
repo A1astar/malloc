@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:15:13 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/29 14:47:55 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/29 16:30:55 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ static void free_using_munmap(size_t *memblock_metadata)
 	t_mmap_lst *next_node = current_node->next_mmap;
 	size_t memblock_size = *memblock_metadata & ~1;
 
-	if(!current_node || (!prev_node && !next_node))
+	if (!current_node || (!prev_node && !next_node))
 		return;
 
 	if (prev_node == current_node && next_node == current_node)
