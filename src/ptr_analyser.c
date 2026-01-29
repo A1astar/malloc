@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 16:13:35 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/29 16:46:15 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/29 18:14:26 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,11 @@ static bool is_inside_mmap_lst(uintptr_t *ptr, t_mmap_lst *first_node)
 
 bool is_from_current_allocator(uintptr_t *ptr)
 {
+    bool res;
+    pthread_mutex_lock(&malloc_mutex);
     if (!is_inside_arena_lst(ptr, g_alloc_arenas.arenas_lst[TINY_ARENA]) && !is_inside_arena_lst(ptr, g_alloc_arenas.arenas_lst[SMALL_ARENA]) && !is_inside_mmap_lst(ptr, g_alloc_arenas.mmap_lst))
-        return false;
-    return true;
+        res = false;
+    res = true;
+    pthread_mutex_unlock(&malloc_mutex);
+    return res;
 }
