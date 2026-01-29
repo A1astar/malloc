@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 10:30:50 by alacroix          #+#    #+#             */
-/*   Updated: 2025/01/04 15:55:13 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/01/29 15:35:55 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	void	*ptr;
+	void	*dst_origin;
 
-	ptr = dst;
+	dst_origin = dst;
 	while (n--)
-		*(unsigned char *)(dst + n) = *(unsigned char *)(src + n);
-	return (ptr);
+		*(unsigned char *)dst++ = *(unsigned char *)src++;
+	return (dst_origin);
 }

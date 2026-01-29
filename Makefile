@@ -56,7 +56,7 @@ $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 
 test: $(SYMLINK_NAME)
-	$(CC) $(CFLAGS) $(TEST_SRC) -I$(INC_DIR) -L. -lft_malloc -Wl,-rpath,'$$ORIGIN' -o $(TEST_NAME)
+	$(CC) $(TEST_SRC) -I$(INC_DIR) -L. -lft_malloc -lpthread -Wl,-rpath,'$$ORIGIN' -o $(TEST_NAME)
 
 clean:
 	rm -rf $(OBJ_DIR)
