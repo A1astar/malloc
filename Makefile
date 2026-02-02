@@ -23,7 +23,7 @@ LIBS = $(LIBFT) -lpthread
 AR = ar
 ARFLAGS = rcs
 
-TEST_SRC = test/main.c
+TEST_SRC = test/test.c
 
 SRC_MALLOC = ft_malloc/arena.c ft_malloc/ft_malloc.c ft_malloc/memblock.c
 SRC_FREE = ft_free.c
