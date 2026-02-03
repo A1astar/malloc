@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 11:06:58 by alacroix          #+#    #+#             */
-/*   Updated: 2026/02/02 14:46:44 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/02/03 11:51:43 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,6 +244,52 @@ void *malloc_thread(void *arg)
        free(small_ptr[i]);
        free(large_ptr[i]);
     }
+
+    unsigned char *origin_ptr1 = malloc(1000);
+    unsigned char *origin_ptr2 = malloc(1000);
+    if(!origin_ptr1 || !origin_ptr2)
+    {
+        thread_data->failed++;
+        return NULL;
+    }
+    thread_data->succes += 2;
+
+    for(size_t i = 0; i < 1000; i++)
+    {
+        origin_ptr1[i] = 0xff;
+        origin_ptr2[i] = 0xff;
+    }
+
+    unsigned char *shrink_ptr = realloc(origin_ptr1, 200);
+    unsigned char *grow_ptr = realloc(origin_ptr2, 5000);
+    if(!shrink_ptr || !grow_ptr)
+    {
+        thread_data->failed++;
+        return NULL;
+    }
+    thread_data->succes += 2;
+
+    for(size_t i = 0; i < 200; i++)
+    {
+        if(shrink_ptr[i] != 0xff)
+        {
+            thread_data->failed++;
+            break;
+        }
+    }
+
+    for(size_t i = 0; i < 1000; i++)
+    {
+        if(grow_ptr[i] != 0xff)
+        {
+            thread_data->failed++;
+            break;
+        }
+    }
+
+    free(shrink_ptr);
+    free(grow_ptr);
+
     return NULL;
 }
 
