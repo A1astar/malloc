@@ -1,0 +1,12 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     malloc_test
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _error, symObjAddr: 0x0, symBinAddr: 0x1000029A8, symSize: 0x30 }
+  - { offsetInCU: 0xA8, offset: 0xA8, size: 0x8, addend: 0x0, symName: _error, symObjAddr: 0x0, symBinAddr: 0x1000029A8, symSize: 0x30 }
+  - { offsetInCU: 0xCC, offset: 0xCC, size: 0x8, addend: 0x0, symName: _malloc_tests, symObjAddr: 0x30, symBinAddr: 0x1000029D8, symSize: 0x4C4 }
+  - { offsetInCU: 0x1B0, offset: 0x1B0, size: 0x8, addend: 0x0, symName: _realloc_tests, symObjAddr: 0x4F4, symBinAddr: 0x100002E9C, symSize: 0x494 }
+  - { offsetInCU: 0x2B4, offset: 0x2B4, size: 0x8, addend: 0x0, symName: _malloc_thread, symObjAddr: 0x988, symBinAddr: 0x100003330, symSize: 0x488 }
+  - { offsetInCU: 0x416, offset: 0x416, size: 0x8, addend: 0x0, symName: _concurrent_malloc, symObjAddr: 0xE10, symBinAddr: 0x1000037B8, symSize: 0x220 }
+  - { offsetInCU: 0x4DD, offset: 0x4DD, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x1030, symBinAddr: 0x1000039D8, symSize: 0x54 }
+...
