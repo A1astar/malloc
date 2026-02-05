@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 11:06:58 by alacroix          #+#    #+#             */
-/*   Updated: 2026/02/03 11:51:43 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/02/05 11:14:40 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "../includes/malloc.h"
 #include <stdio.h>
 #include <pthread.h>
+
 #define MAX_PTR 10
 #define NB_THREADS 4
 
