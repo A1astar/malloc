@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 11:06:58 by alacroix          #+#    #+#             */
-/*   Updated: 2026/02/05 16:34:52 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/02/06 14:30:20 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,8 @@ void malloc_tests()
 
     ft_printf(ITALIC BOLD " • show alloc\n" RESET);
     show_alloc_mem();
-    show_alloc_mem_ex();
+    //show_alloc_mem_ex();
+
 
     ft_printf(ITALIC BOLD " • free\n" RESET);
     for (size_t i = 0; i < MAX_PTR; i++)

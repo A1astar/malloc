@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:09:16 by alacroix          #+#    #+#             */
-/*   Updated: 2026/02/05 11:14:36 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/02/06 14:00:33 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 // DEFINES
 #define _GNU_SOURCE
 #define BLOCKS_MAX_NB 100
-#define TINY_MAX_SIZE 64
-#define SMALL_MAX_SIZE 1024
+#define TINY_MAX_SIZE 1024
+#define SMALL_MAX_SIZE 4096
 #define TINY_ARENA 0
 #define SMALL_ARENA 1
 #define ARENA_TYPE 2

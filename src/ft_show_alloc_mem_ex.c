@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 12:24:07 by alacroix          #+#    #+#             */
-/*   Updated: 2026/01/29 18:11:59 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/02/06 14:19:39 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,21 +83,21 @@ static void hexdump_arena_lst(t_arena_lst *first_node, char *type)
 
 static void hexdump_mmap_lst(t_mmap_lst *first_node)
 {
-    ft_printf(BOLD "BIG:\n" RESET);
-    t_mmap_lst *current_node = first_node;
-    if (!current_node)
-    {
-        ft_printf(ITALIC "  Empty\n" RESET);
-        return;
-    }
-    while (true)
-    {
-        size_t *metadata = (size_t *)((char *)current_node + align16(sizeof(t_mmap_lst)));
-        hexdump_mmap((void *)current_node, *metadata & ~1);
-        current_node = current_node->next_mmap;
-        if (current_node == first_node)
-            break;
-    }
+   ft_printf(BOLD "BIG:\n" RESET);
+   t_mmap_lst *current_node = first_node;
+   if (!current_node)
+   {
+       ft_printf(ITALIC "  Empty\n" RESET);
+       return;
+   }
+   while (true)
+   {
+       size_t *metadata = (size_t *)((char *)current_node + align16(sizeof(t_mmap_lst)));
+       hexdump_mmap((void *)current_node, *metadata & ~1);
+       current_node = current_node->next_mmap;
+       if (current_node == first_node)
+           break;
+   }
 }
 
 void show_alloc_mem_ex(void)

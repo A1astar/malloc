@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:15:13 by alacroix          #+#    #+#             */
-/*   Updated: 2026/02/02 14:18:16 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/02/06 14:32:58 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void remove_arena(t_arena_lst *arena)
 		next_node->prev_arena = prev_node;
 		g_alloc_arenas.arenas_lst[arena->arena_type] = next_node;
 	}
-	munmap((void *)current_node, current_node->arena_type);
+	munmap((void *)current_node, current_node->arena_size);
 }
 
 static t_arena_lst *find_arena(size_t arena_type, size_t *memblock_metadata)
@@ -122,7 +122,7 @@ static void free_using_munmap(size_t *memblock_metadata)
 		next_node->prev_mmap = prev_node;
 		g_alloc_arenas.mmap_lst = next_node;
 	}
-	munmap((void *)current_node, *memblock_metadata);
+	munmap((void *)current_node, memblock_size);
 	g_alloc_arenas.total_alloc_bytes -= memblock_size;
 }
 

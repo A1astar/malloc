@@ -93,7 +93,7 @@ cc -Wall -Wextra -Werror -std=gnu99 -I./includes -Ilibft/includes -c -fPIC src/f
 mkdir -p obj/
 cc -Wall -Wextra -Werror -std=gnu99 -I./includes -Ilibft/includes -c -fPIC src/ptr_analyser.c -o obj/ptr_analyser.o
 cc -shared -o libft_malloc_Testing.so ./obj/ft_malloc/arena.o ./obj/ft_malloc/ft_malloc.o ./obj/ft_malloc/memblock.o ./obj/ft_free.o ./obj/globals.o ./obj/ft_realloc.o ./obj/ft_show_alloc_mem.o ./obj/ft_show_alloc_mem_ex.o ./obj/ptr_analyser.o libft/libft.a -lpthread
-ln -s libft_malloc_Testing.so libft_malloc.so
+ln -sf libft_malloc_Testing.so libft_malloc.so
 
 ---- ln -sf libft_malloc_Testing.so libft_malloc.so ----
 $ ln -sf libft_malloc_Testing.so libft_malloc.so
@@ -102,7 +102,7 @@ $ ln -sf libft_malloc_Testing.so libft_malloc.so
 ---- ls -l libft_malloc.so ----
 $ ls -l libft_malloc.so
 
-lrwxrwxrwx 1 alacroix 2024_paris 23 Feb  6 13:49 libft_malloc.so -> libft_malloc_Testing.so
+lrwxrwxrwx 1 alacroix 2024_paris 23 Feb  6 14:36 libft_malloc.so -> libft_malloc_Testing.so
 
 
 
@@ -144,18 +144,18 @@ $ /usr/bin/time -v ./test0
 	Command being timed: "./test0"
 	User time (seconds): 0.00
 	System time (seconds): 0.00
-	Percent of CPU this job got: 88%
+	Percent of CPU this job got: 87%
 	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00
 	Average shared text size (kbytes): 0
 	Average unshared data size (kbytes): 0
 	Average stack size (kbytes): 0
 	Average total size (kbytes): 0
-	Maximum resident set size (kbytes): 1152
+	Maximum resident set size (kbytes): 960
 	Average resident set size (kbytes): 0
 	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 63
+	Minor (reclaiming a frame) page faults: 62
 	Voluntary context switches: 1
-	Involuntary context switches: 0
+	Involuntary context switches: 1
 	Swaps: 0
 	File system inputs: 0
 	File system outputs: 0
@@ -171,7 +171,7 @@ $ /usr/bin/time -v ./test1
 	Command being timed: "./test1"
 	User time (seconds): 0.00
 	System time (seconds): 0.00
-	Percent of CPU this job got: 93%
+	Percent of CPU this job got: 94%
 	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00
 	Average shared text size (kbytes): 0
 	Average unshared data size (kbytes): 0
@@ -180,7 +180,7 @@ $ /usr/bin/time -v ./test1
 	Maximum resident set size (kbytes): 2112
 	Average resident set size (kbytes): 0
 	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 326
+	Minor (reclaiming a frame) page faults: 324
 	Voluntary context switches: 1
 	Involuntary context switches: 0
 	Swaps: 0
@@ -211,8 +211,8 @@ $ ./run_linux.sh /usr/bin/time -v ./test0
 	Maximum resident set size (kbytes): 1152
 	Average resident set size (kbytes): 0
 	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 71
-	Voluntary context switches: 1
+	Minor (reclaiming a frame) page faults: 70
+	Voluntary context switches: 0
 	Involuntary context switches: 0
 	Swaps: 0
 	File system inputs: 0
@@ -229,16 +229,16 @@ $ ./run_linux.sh /usr/bin/time -v ./test1
 	Command being timed: "./test1"
 	User time (seconds): 0.00
 	System time (seconds): 0.00
-	Percent of CPU this job got: 0%
+	Percent of CPU this job got: 100%
 	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00
 	Average shared text size (kbytes): 0
 	Average unshared data size (kbytes): 0
 	Average stack size (kbytes): 0
 	Average total size (kbytes): 0
-	Maximum resident set size (kbytes): 5184
+	Maximum resident set size (kbytes): 2112
 	Average resident set size (kbytes): 0
 	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 1096
+	Minor (reclaiming a frame) page faults: 331
 	Voluntary context switches: 1
 	Involuntary context switches: 1
 	Swaps: 0
@@ -264,7 +264,7 @@ $ ./run_linux.sh /usr/bin/time -v ./test2
 	Command being timed: "./test2"
 	User time (seconds): 0.00
 	System time (seconds): 0.00
-	Percent of CPU this job got: 66%
+	Percent of CPU this job got: 75%
 	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00
 	Average shared text size (kbytes): 0
 	Average unshared data size (kbytes): 0
@@ -273,9 +273,9 @@ $ ./run_linux.sh /usr/bin/time -v ./test2
 	Maximum resident set size (kbytes): 1152
 	Average resident set size (kbytes): 0
 	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 1095
+	Minor (reclaiming a frame) page faults: 1096
 	Voluntary context switches: 1
-	Involuntary context switches: 0
+	Involuntary context switches: 1
 	Swaps: 0
 	File system inputs: 0
 	File system outputs: 0
@@ -311,28 +311,28 @@ $ gcc -o test4 test4.c -L. -lft_malloc -Wl\,-rpath\,\$ORIGIN
 $ ./run_linux.sh ./test4
 
 [1mTINY:
-[0m[1m    Arena [0x7b370d07d000] -> [0x7b370d07f000] (8192 bytes)
-[0m    [0x7b370d07d030] - [0x7b370d07d050] : 32 bytes
-    [0x7b370d07d050] - [0x7b370d07d070] : 32 bytes
-    [0x7b370d07d070] - [0x7b370d07d090] : 32 bytes
-    [0x7b370d07d090] - [0x7b370d07d0b0] : 32 bytes
-    [0x7b370d07d0b0] - [0x7b370d07d0d0] : 32 bytes
-    [0x7b370d07d0d0] - [0x7b370d07d100] : 48 bytes
+[0m[1m    Arena [0x77e174e9c000] -> [0x77e174eb6000] (106496 bytes)
+[0m    [0x77e174e9c030] - [0x77e174e9c050] : 32 bytes
+    [0x77e174e9c050] - [0x77e174e9c070] : 32 bytes
+    [0x77e174e9c070] - [0x77e174e9c090] : 32 bytes
+    [0x77e174e9c090] - [0x77e174e9c0b0] : 32 bytes
+    [0x77e174e9c0b0] - [0x77e174e9c0d0] : 32 bytes
+    [0x77e174e9c0d0] - [0x77e174e9c100] : 48 bytes
+    [0x77e174e9c100] - [0x77e174e9c150] : 80 bytes
+    [0x77e174e9c150] - [0x77e174e9c1e0] : 144 bytes
+    [0x77e174e9c1e0] - [0x77e174e9c2f0] : 272 bytes
+    [0x77e174e9c2f0] - [0x77e174e9c500] : 528 bytes
 [1mSMALL:
-[0m[1m    Arena [0x7b370d048000] -> [0x7b370d062000] (106496 bytes)
-[0m    [0x7b370d048030] - [0x7b370d048080] : 80 bytes
-    [0x7b370d048080] - [0x7b370d048110] : 144 bytes
-    [0x7b370d048110] - [0x7b370d048220] : 272 bytes
-    [0x7b370d048220] - [0x7b370d048430] : 528 bytes
+[0m[1m    Arena [0x77e174e34000] -> [0x77e174e99000] (413696 bytes)
+[0m    [0x77e174e34030] - [0x77e174e34440] : 1040 bytes
+    [0x77e174e34440] - [0x77e174e34c50] : 2064 bytes
 [1mLARGE:
-[0m   [0x7b370d0bf000] - [0x7b370d0bf430] : 1072 bytes
-   [0x7b370d07c000] - [0x7b370d07c830] : 2096 bytes
-   [0x7b370d07a000] - [0x7b370d07b030] : 4144 bytes
-   [0x7b370d071000] - [0x7b370d079030] : 32816 bytes
-   [0x7b370ccff000] - [0x7b370cdff030] : 1048624 bytes
-   [0x7b370bcfe000] - [0x7b370ccfe030] : 16777264 bytes
-   [0x7b3703cfd000] - [0x7b370bcfd030] : 134217776 bytes
-[1mTotal: 152085024 bytes
+[0m   [0x77e174e32000] - [0x77e174e33030] : 4144 bytes
+   [0x77e174e29000] - [0x77e174e31030] : 32816 bytes
+   [0x77e174aff000] - [0x77e174bff030] : 1048624 bytes
+   [0x77e173afe000] - [0x77e174afe030] : 16777264 bytes
+   [0x77e16bafd000] - [0x77e173afd030] : 134217776 bytes
+[1mTotal: 152084960 bytes
 [0m
 
 
