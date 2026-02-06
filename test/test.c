@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 11:06:58 by alacroix          #+#    #+#             */
-/*   Updated: 2026/02/06 14:30:20 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/02/06 15:26:20 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <pthread.h>
 
-#define MAX_PTR 10
+#define MAX_PTR 20
 #define NB_THREADS 4
 
 typedef struct s_thread_data

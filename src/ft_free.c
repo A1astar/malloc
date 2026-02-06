@@ -6,7 +6,7 @@
 /*   By: alacroix <alacroix@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:15:13 by alacroix          #+#    #+#             */
-/*   Updated: 2026/02/06 15:07:27 by alacroix         ###   ########.fr       */
+/*   Updated: 2026/02/06 15:19:22 by alacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ static void free_inside_arena(size_t arena_type, size_t *memblock_metadata)
 		return;
 	mark_memblock_as_free(memblock_metadata, &arena);
 	g_alloc_arenas.total_alloc_bytes -= *(size_t *)memblock_metadata & ~1;
-	if (arena->nb_alloc == 0  && !arena->prev_arena)
+	if (arena->nb_alloc == 0  && (arena->prev_arena != arena))
 		remove_arena(arena);
 	else
 		coalese_memblocks(arena, first_memblock, end_of_arena);
