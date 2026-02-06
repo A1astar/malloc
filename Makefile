@@ -39,12 +39,6 @@ OBJ = $(addprefix $(OBJ_DIR)/,$(SRC:.c=.o))
 
 all: $(OBJ_DIR) $(LIBFT) $(NAME) $(SYMLINK_NAME)
 
-$(SYMLINK_NAME) : $(NAME)
-	ln -s $(NAME) $(SYMLINK_NAME)
-
-$(NAME) : $(OBJ) $(LIBFT)
-	$(CC) -shared -o $(NAME) $(OBJ) $(LIBS)
-
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
@@ -55,8 +49,16 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 
-test: $(SYMLINK_NAME)
-	$(CC) $(TEST_SRC) -g -I$(INC_DIR) -L. -lft_malloc -lpthread -Wl,-rpath,'$$ORIGIN' -o $(TEST_NAME)
+$(SYMLINK_NAME) : $(NAME)
+	ln -sf $(NAME) $(SYMLINK_NAME)
+
+$(NAME) : $(OBJ) $(LIBFT)
+	$(CC) -shared -o $(NAME) $(OBJ) $(LIBS)
+
+test: $(TEST_NAME)
+
+$(TEST_NAME): $(TEST_SRC) $(SYMLINK_NAME)
+	$(CC) $(CFLAGS) -g -I$(INC_DIR) -L. -lft_malloc -lpthread -Wl,-rpath,'$$ORIGIN' -o $@ $<
 
 clean:
 	rm -rf $(OBJ_DIR)
@@ -72,3 +74,4 @@ re: fclean all
 
 .PHONY: all clean fclean re test
 .DEFAULT_GOAL := all
+
