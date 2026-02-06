@@ -1,0 +1,361 @@
+
+
+========== LIBRARY COMPILATION (HOSTTYPE + symlink) ==========
+
+---- make re ----
+$ make re
+
+rm -rf ./obj
+make -C libft clean
+make[1]: Entering directory '/home/alacroix/Desktop/malloc/libft'
+make[1]: Leaving directory '/home/alacroix/Desktop/malloc/libft'
+rm -f libft_malloc_Testing.so
+rm -f libft_malloc.so
+rm -f malloc_test
+make -C libft fclean
+make[1]: Entering directory '/home/alacroix/Desktop/malloc/libft'
+make[1]: Leaving directory '/home/alacroix/Desktop/malloc/libft'
+mkdir -p ./obj
+make -C libft
+make[1]: Entering directory '/home/alacroix/Desktop/malloc/libft'
+gcc -Wall -Werror -Wextra -I includes -c conv/ft_atoi.c -o obj/conv/ft_atoi.o
+gcc -Wall -Werror -Wextra -I includes -c conv/ft_atol.c -o obj/conv/ft_atol.o
+gcc -Wall -Werror -Wextra -I includes -c conv/ft_atoll.c -o obj/conv/ft_atoll.o
+gcc -Wall -Werror -Wextra -I includes -c conv/ft_itoa.c -o obj/conv/ft_itoa.o
+gcc -Wall -Werror -Wextra -I includes -c fd/ft_putchar_fd.c -o obj/fd/ft_putchar_fd.o
+gcc -Wall -Werror -Wextra -I includes -c fd/ft_putendl_fd.c -o obj/fd/ft_putendl_fd.o
+gcc -Wall -Werror -Wextra -I includes -c fd/ft_putnbr_fd.c -o obj/fd/ft_putnbr_fd.o
+gcc -Wall -Werror -Wextra -I includes -c fd/ft_putstr_fd.c -o obj/fd/ft_putstr_fd.o
+gcc -Wall -Werror -Wextra -I includes -c fd/get_next_line.c -o obj/fd/get_next_line.o
+gcc -Wall -Werror -Wextra -I includes -c free/ft_free_tab.c -o obj/free/ft_free_tab.o
+gcc -Wall -Werror -Wextra -I includes -c is/ft_isalnum.c -o obj/is/ft_isalnum.o
+gcc -Wall -Werror -Wextra -I includes -c is/ft_isalpha.c -o obj/is/ft_isalpha.o
+gcc -Wall -Werror -Wextra -I includes -c is/ft_isascii.c -o obj/is/ft_isascii.o
+gcc -Wall -Werror -Wextra -I includes -c is/ft_isdigit.c -o obj/is/ft_isdigit.o
+gcc -Wall -Werror -Wextra -I includes -c is/ft_isprint.c -o obj/is/ft_isprint.o
+gcc -Wall -Werror -Wextra -I includes -c lst/ft_lstadd_back.c -o obj/lst/ft_lstadd_back.o
+gcc -Wall -Werror -Wextra -I includes -c lst/ft_lstadd_front.c -o obj/lst/ft_lstadd_front.o
+gcc -Wall -Werror -Wextra -I includes -c lst/ft_lstclear.c -o obj/lst/ft_lstclear.o
+gcc -Wall -Werror -Wextra -I includes -c lst/ft_lstdelone.c -o obj/lst/ft_lstdelone.o
+gcc -Wall -Werror -Wextra -I includes -c lst/ft_lstiter.c -o obj/lst/ft_lstiter.o
+gcc -Wall -Werror -Wextra -I includes -c lst/ft_lstlast.c -o obj/lst/ft_lstlast.o
+gcc -Wall -Werror -Wextra -I includes -c lst/ft_lstmap.c -o obj/lst/ft_lstmap.o
+gcc -Wall -Werror -Wextra -I includes -c lst/ft_lstnew.c -o obj/lst/ft_lstnew.o
+gcc -Wall -Werror -Wextra -I includes -c lst/ft_lstsize.c -o obj/lst/ft_lstsize.o
+gcc -Wall -Werror -Wextra -I includes -c math/ft_pow.c -o obj/math/ft_pow.o
+gcc -Wall -Werror -Wextra -I includes -c math/ft_sqrt.c -o obj/math/ft_sqrt.o
+gcc -Wall -Werror -Wextra -I includes -c mem/ft_bzero.c -o obj/mem/ft_bzero.o
+gcc -Wall -Werror -Wextra -I includes -c mem/ft_calloc.c -o obj/mem/ft_calloc.o
+gcc -Wall -Werror -Wextra -I includes -c mem/ft_memchr.c -o obj/mem/ft_memchr.o
+gcc -Wall -Werror -Wextra -I includes -c mem/ft_memcmp.c -o obj/mem/ft_memcmp.o
+gcc -Wall -Werror -Wextra -I includes -c mem/ft_memcpy.c -o obj/mem/ft_memcpy.o
+gcc -Wall -Werror -Wextra -I includes -c mem/ft_memmove.c -o obj/mem/ft_memmove.o
+gcc -Wall -Werror -Wextra -I includes -c mem/ft_memset.c -o obj/mem/ft_memset.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_split.c -o obj/str/ft_split.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_strchr.c -o obj/str/ft_strchr.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_strdup.c -o obj/str/ft_strdup.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_striteri.c -o obj/str/ft_striteri.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_strjoin.c -o obj/str/ft_strjoin.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_strlcat.c -o obj/str/ft_strlcat.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_strlcpy.c -o obj/str/ft_strlcpy.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_strlen.c -o obj/str/ft_strlen.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_strmapi.c -o obj/str/ft_strmapi.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_strncmp.c -o obj/str/ft_strncmp.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_strnstr.c -o obj/str/ft_strnstr.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_strrchr.c -o obj/str/ft_strrchr.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_strtrim.c -o obj/str/ft_strtrim.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_substr.c -o obj/str/ft_substr.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_tolower.c -o obj/str/ft_tolower.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_toupper.c -o obj/str/ft_toupper.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_strsize_comp.c -o obj/str/ft_strsize_comp.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_tabsize.c -o obj/str/ft_tabsize.o
+gcc -Wall -Werror -Wextra -I includes -c str/ft_strndup.c -o obj/str/ft_strndup.o
+gcc -Wall -Werror -Wextra -I includes -c ft_printf/ft_printf.c -o obj/ft_printf/ft_printf.o
+gcc -Wall -Werror -Wextra -I includes -c ft_printf/ft_printf_utils.c -o obj/ft_printf/ft_printf_utils.o
+gcc -Wall -Werror -Wextra -I includes -c ft_printf/ft_printf_utils2.c -o obj/ft_printf/ft_printf_utils2.o
+make[1]: Leaving directory '/home/alacroix/Desktop/malloc/libft'
+mkdir -p obj/ft_malloc/
+cc -Wall -Wextra -Werror -std=gnu99 -I./includes -Ilibft/includes -c -fPIC src/ft_malloc/arena.c -o obj/ft_malloc/arena.o
+mkdir -p obj/ft_malloc/
+cc -Wall -Wextra -Werror -std=gnu99 -I./includes -Ilibft/includes -c -fPIC src/ft_malloc/ft_malloc.c -o obj/ft_malloc/ft_malloc.o
+mkdir -p obj/ft_malloc/
+cc -Wall -Wextra -Werror -std=gnu99 -I./includes -Ilibft/includes -c -fPIC src/ft_malloc/memblock.c -o obj/ft_malloc/memblock.o
+mkdir -p obj/
+cc -Wall -Wextra -Werror -std=gnu99 -I./includes -Ilibft/includes -c -fPIC src/ft_free.c -o obj/ft_free.o
+mkdir -p obj/
+cc -Wall -Wextra -Werror -std=gnu99 -I./includes -Ilibft/includes -c -fPIC src/globals.c -o obj/globals.o
+mkdir -p obj/
+cc -Wall -Wextra -Werror -std=gnu99 -I./includes -Ilibft/includes -c -fPIC src/ft_realloc.c -o obj/ft_realloc.o
+mkdir -p obj/
+cc -Wall -Wextra -Werror -std=gnu99 -I./includes -Ilibft/includes -c -fPIC src/ft_show_alloc_mem.c -o obj/ft_show_alloc_mem.o
+mkdir -p obj/
+cc -Wall -Wextra -Werror -std=gnu99 -I./includes -Ilibft/includes -c -fPIC src/ft_show_alloc_mem_ex.c -o obj/ft_show_alloc_mem_ex.o
+mkdir -p obj/
+cc -Wall -Wextra -Werror -std=gnu99 -I./includes -Ilibft/includes -c -fPIC src/ptr_analyser.c -o obj/ptr_analyser.o
+cc -shared -o libft_malloc_Testing.so ./obj/ft_malloc/arena.o ./obj/ft_malloc/ft_malloc.o ./obj/ft_malloc/memblock.o ./obj/ft_free.o ./obj/globals.o ./obj/ft_realloc.o ./obj/ft_show_alloc_mem.o ./obj/ft_show_alloc_mem_ex.o ./obj/ptr_analyser.o libft/libft.a -lpthread
+ln -s libft_malloc_Testing.so libft_malloc.so
+
+---- ln -sf libft_malloc_Testing.so libft_malloc.so ----
+$ ln -sf libft_malloc_Testing.so libft_malloc.so
+
+
+---- ls -l libft_malloc.so ----
+$ ls -l libft_malloc.so
+
+lrwxrwxrwx 1 alacroix 2024_paris 23 Feb  6 13:49 libft_malloc.so -> libft_malloc_Testing.so
+
+
+
+========== FUNCTIONS EXPORT (nm) ==========
+
+---- nm -g libft_malloc.so | egrep malloc/free/realloc/show_alloc_mem ----
+$ bash -lc nm\ -g\ libft_malloc.so\ \|\ egrep\ \'\(_\?malloc\|_\?free\|_\?realloc\|show_alloc_mem\)\'\ \|\|\ true
+
+0000000000001c10 T free
+00000000000017c0 T malloc
+0000000000006120 B malloc_mutex
+0000000000002200 T realloc
+0000000000002380 T show_alloc_mem
+0000000000002600 T show_alloc_mem_ex
+
+
+
+========== RUN SCRIPT CHECK ==========
+
+---- chmod +x ./run_linux.sh ----
+$ chmod +x ./run_linux.sh
+
+
+
+
+========== MALLOC TESTS WITHOUT LIB (baseline) ==========
+
+---- gcc -o test0 test0.c ----
+$ gcc -o test0 test0.c
+
+
+---- gcc -o test1 test1.c ----
+$ gcc -o test1 test1.c
+
+
+---- test0 (no preload) ----
+$ /usr/bin/time -v ./test0
+
+	Command being timed: "./test0"
+	User time (seconds): 0.00
+	System time (seconds): 0.00
+	Percent of CPU this job got: 88%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1152
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 63
+	Voluntary context switches: 1
+	Involuntary context switches: 0
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+
+---- test1 (no preload) ----
+$ /usr/bin/time -v ./test1
+
+	Command being timed: "./test1"
+	User time (seconds): 0.00
+	System time (seconds): 0.00
+	Percent of CPU this job got: 93%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2112
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 326
+	Voluntary context switches: 1
+	Involuntary context switches: 0
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+
+
+
+========== MALLOC TESTS WITH LIB (preload via run_*.sh) ==========
+
+---- test0 (with preload) ----
+$ ./run_linux.sh /usr/bin/time -v ./test0
+
+	Command being timed: "./test0"
+	User time (seconds): 0.00
+	System time (seconds): 0.00
+	Percent of CPU this job got: 89%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1152
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 71
+	Voluntary context switches: 1
+	Involuntary context switches: 0
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+
+---- test1 (with preload) ----
+$ ./run_linux.sh /usr/bin/time -v ./test1
+
+	Command being timed: "./test1"
+	User time (seconds): 0.00
+	System time (seconds): 0.00
+	Percent of CPU this job got: 0%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 5184
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 1096
+	Voluntary context switches: 1
+	Involuntary context switches: 1
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+
+
+
+========== FREE TESTS (test2 vs test1) ==========
+
+---- gcc -o test2 test2.c ----
+$ gcc -o test2 test2.c
+
+
+---- test2 (with preload) ----
+$ ./run_linux.sh /usr/bin/time -v ./test2
+
+	Command being timed: "./test2"
+	User time (seconds): 0.00
+	System time (seconds): 0.00
+	Percent of CPU this job got: 66%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1152
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 1095
+	Voluntary context switches: 1
+	Involuntary context switches: 0
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+
+
+
+========== REALLOC TEST (test3: must print Hello world! twice) ==========
+
+---- gcc -o test3 test3.c -L. -lft_malloc -Wl,-rpath,'$ORIGIN' ----
+$ gcc -o test3 test3.c -L. -lft_malloc -Wl\,-rpath\,\$ORIGIN
+
+
+---- run test3 with preload ----
+$ ./run_linux.sh ./test3
+
+Hello world!
+Hello world!
+
+
+
+========== SHOW_ALLOC_MEM TEST (test4) ==========
+
+---- gcc -o test4 test4.c -L. -lft_malloc -Wl,-rpath,'$ORIGIN' ----
+$ gcc -o test4 test4.c -L. -lft_malloc -Wl\,-rpath\,\$ORIGIN
+
+
+---- run test4 with preload ----
+$ ./run_linux.sh ./test4
+
+[1mTINY:
+[0m[1m    Arena [0x7b370d07d000] -> [0x7b370d07f000] (8192 bytes)
+[0m    [0x7b370d07d030] - [0x7b370d07d050] : 32 bytes
+    [0x7b370d07d050] - [0x7b370d07d070] : 32 bytes
+    [0x7b370d07d070] - [0x7b370d07d090] : 32 bytes
+    [0x7b370d07d090] - [0x7b370d07d0b0] : 32 bytes
+    [0x7b370d07d0b0] - [0x7b370d07d0d0] : 32 bytes
+    [0x7b370d07d0d0] - [0x7b370d07d100] : 48 bytes
+[1mSMALL:
+[0m[1m    Arena [0x7b370d048000] -> [0x7b370d062000] (106496 bytes)
+[0m    [0x7b370d048030] - [0x7b370d048080] : 80 bytes
+    [0x7b370d048080] - [0x7b370d048110] : 144 bytes
+    [0x7b370d048110] - [0x7b370d048220] : 272 bytes
+    [0x7b370d048220] - [0x7b370d048430] : 528 bytes
+[1mLARGE:
+[0m   [0x7b370d0bf000] - [0x7b370d0bf430] : 1072 bytes
+   [0x7b370d07c000] - [0x7b370d07c830] : 2096 bytes
+   [0x7b370d07a000] - [0x7b370d07b030] : 4144 bytes
+   [0x7b370d071000] - [0x7b370d079030] : 32816 bytes
+   [0x7b370ccff000] - [0x7b370cdff030] : 1048624 bytes
+   [0x7b370bcfe000] - [0x7b370ccfe030] : 16777264 bytes
+   [0x7b3703cfd000] - [0x7b370bcfd030] : 134217776 bytes
+[1mTotal: 152085024 bytes
+[0m
+
+
+========== ALIGNMENT TEST (test5) ==========
+
+---- gcc -o test5 test5.c -L. -lft_malloc -Wl,-rpath,'$ORIGIN' ----
+$ gcc -o test5 test5.c -L. -lft_malloc -Wl\,-rpath\,\$ORIGIN
+
+
+---- run test5 with preload ----
+$ ./run_linux.sh ./test5
+
+
+
+
+========== CLEANUP ==========
+
+---- rm -f test0 test1 test2 test3 test4 test5 ----
+$ rm -f test0 test1 test2 test3 test4 test5
+
+
+
+
+========== DONE ==========
+
+Wrote full report to resultat.txt
