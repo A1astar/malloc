@@ -52,9 +52,9 @@ gcc -o program program.c -L. -lft_malloc
 - **Heap management**
   - Uses `mmap` exclusively (no `sbrk`)
   - Three allocation strategies:
-    - **TINY**: blocks ≤ 64 bytes → pre-allocated arena
-    - **SMALL**: blocks ≤ 1024 bytes → pre-allocated arena
-    - **LARGE**: blocks > 1024 bytes → individual `mmap` per allocation
+    - **TINY**: blocks ≤ 1024 bytes → pre-allocated arena
+    - **SMALL**: blocks ≤ 4096 bytes → pre-allocated arena
+    - **LARGE**: blocks > 4096 bytes → individual `mmap` per allocation
   - Arena size: 100 blocks × max_block_size + arena header, page-aligned
 - **Free-block organization**
   - Implicit free list (no explicit links between free blocks)
