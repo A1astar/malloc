@@ -70,7 +70,7 @@ gcc -o program program.c -L. -lft_malloc
   - Triggered on `free()` after marking block as free
   - Forward coalescing only (merges consecutive free blocks)
   - Updates arena's `max_available` during merge
-  - Empty arenas (nb_alloc == 0) are unmapped
+  - Empty arenas (nb_alloc == 0) are unmapped, unless it's the last one of his kind
 - **Security / robustness**
   - Thread-safe: global `pthread_mutex_t` protects all operations
   - Validates pointers via `is_from_current_allocator()` before freeing
